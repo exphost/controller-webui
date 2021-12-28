@@ -1,0 +1,55 @@
+stages:
+  - prepare
+  - tests
+  - build
+  - push
+  - deploy
+
+
+.registry:
+  before_script:
+    - echo -n $CI_REGISTRY_PASSWORD | podman login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+build:
+  stage: build
+  image: quay.io/podman/stable
+  extends: .registry
+  script:
+    - podman pull $CI_REGISTRY_IMAGE:latest || true
+    - >
+      podman build 
+      --pull
+      --build-arg http_proxy=$http_proxy
+      --build-arg https_proxy=$https_proxy
+      --build-arg no_proxy=$no_proxy
+      --cache-from $CI_REGISTRY_IMAGE:latest
+      --tag $CI_REGISTRY_IMAGE:dev
+      .
+
+    - podman push $CI_REGISTRY_IMAGE:dev
+
+push latest:
+  variables:
+    GIT_STRATEGY: none
+  image: quay.io/podman/stable
+  stage: push
+  extends: .registry
+  only:
+    - master
+  script:
+    - podman pull $CI_REGISTRY_IMAGE:dev
+    - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:latest
+    - podman push $CI_REGISTRY_IMAGE:latest
+
+push tag:
+  variables:
+    GIT_STRATEGY: none
+  image: quay.io/podman/stable
+  stage: push
+  extends: .registry
+  only:
+    - tags
+  script:
+    - podman pull $CI_REGISTRY_IMAGE:dev
+    - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+    - podman push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
