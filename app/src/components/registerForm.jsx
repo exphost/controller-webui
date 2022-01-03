@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function RegisterForm() {
     const [input, setInputs] = useState({
@@ -24,20 +25,47 @@ function RegisterForm() {
             alert("Passwords didn't match");
             return 1;
         }
+        const query = JSON.stringify({
+          query: `mutation {
+                    userRegister(login: "${input["login"]}",
+                                 mail: "${input["mail"]}",
+                                 sn: "${input["sn"]}",
+                                 gn: "${input["gn"]}",
+                                 password: "${input["password"]}"
+                                )
+                        {
+                            user {
+                                gn,
+                                sn,
+                                mail,
+                                login
+                            },
+                            error
+                        }
+                    }`
+        });
         const requestOptions = {
+            url: window.API_URL+'/graphql',
             method: "POST",
             headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                login: input['login'],
-                mail: input['mail'],
-                sn: input['sn'],
-                gn: input['gn'],
-                password: input['password']
-            })
+            data: query,
+            responseType: 'json'
         }
-        fetch(window.API_URL+'/users/users/', requestOptions)
-            .then(response => alert('Submitted successfully'))
-            .catch(error => alert('Form submit error' + error))
+        axios
+            .request(requestOptions)
+            .then(function (response) {
+                const res = response.data; // Response received from the API
+                console.log("A");
+                console.log(response);
+                console.log("B");
+                console.log(res);
+                console.log("C");
+                alert("Submit successfuly");
+            })
+            .catch(function (error) {
+                console.error(error.response);
+                alert("Submit failed")
+            });
     };
     const handleChange = (event) => {
         const name = event.target.name;
