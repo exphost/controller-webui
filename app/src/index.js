@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App2 from './App';
 import RegisterPage from './pages/Register';
+import { LoginPageRedirect, LoginPageCallback } from './pages/LoginPage';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -21,6 +22,8 @@ export default function App() {
         <Route path="/">
           <Route index element={<App2 />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="login" element={<LoginPageRedirect />} />
+          <Route path="oauth2/callback" element={<LoginPageCallback />} />
         </Route>
       </Routes> 
     </BrowserRouter>
