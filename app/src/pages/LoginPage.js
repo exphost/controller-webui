@@ -5,7 +5,7 @@ import { Redirect } from "react-router-dom";
 export function LoginPageRedirect() {
   const [cookies, setCookie] = useCookies();
   const state = Math.random().toString(32).substr(2,);
-  setCookie("oauth2_state", state);
+  localStorage.setItem("oauth2_state", state);
   localStorage.setItem("AUTH_URL", window.AUTH_URL);
   localStorage.setItem("AUTH_CLIENT_ID", window.AUTH_CLIENT_ID);
   localStorage.setItem("AUTH_SECRET", window.AUTH_SECRET);
@@ -41,9 +41,15 @@ export function LoginPageCallback() {
     .then(response => response.json())
     .then(data => (
       console.log(data),
-      localStorage.setItem('accessToken', data['access_token']),
-      localStorage.setItem('refresh_token', data['refresh_token']),
-      removeCookie("oauth2_state"),
+      setCookie('accessToken', data['access_token'], {
+        path: '/',
+        secure: true,
+      }),
+      setCookie('refresh_token', data['refresh_token'], {
+        path: '/',
+        secure: true,
+      }),
+      localStorage.removeItem("oauth2_state"),
       localStorage.removeItem("AUTH_URL"),
       localStorage.removeItem("AUTH_CLIENT_ID"),
       localStorage.removeItem("AUTH_SECRET"),
