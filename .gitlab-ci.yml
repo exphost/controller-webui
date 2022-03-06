@@ -32,8 +32,6 @@ tests:
   script:
     - cd /app
     - npm run test:ci
-    - cat /app/test_out/cobertura-coverage.xml
-    - cat /app/test_out/junit.xml
     - cp -r /app/test_out $CI_PROJECT_DIR
   artifacts:
     reports:
