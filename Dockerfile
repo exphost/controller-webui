@@ -1,12 +1,12 @@
-FROM node:alpine as build
-WORKDIR /app
-COPY app/package.json /app/
-RUN npm install
-COPY app/ /app/
-RuN npm run build
+ARG APPIMAGE=registry.gitlab.exphost.pl/exphost-controller/webui-app
+ARG APPVER=latest
 
-FROM docker.io/library/nginx:latest as www
+FROM ${APPIMAGE}:${APPVER} as app
+
+FROM docker.io/library/nginx:latest
 EXPOSE 80
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx/entry.d/ /docker-entrypoint.d/
-COPY --from=build /app/build/ /usr/share/nginx/html/
+RUN echo "--from=${APPIMAGE}:${APPVER} /app/build/ /usr/share/nginx/html/"
+COPY --from=app /app/build/ /usr/share/nginx/html/
+

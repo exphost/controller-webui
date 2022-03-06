@@ -1,5 +1,6 @@
 stages:
   - prepare
+  - build_app
   - tests
   - build
   - push
@@ -10,6 +11,36 @@ stages:
   before_script:
     - echo -n $CI_REGISTRY_PASSWORD | podman login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
 
+buildapp:
+  stage: build_app
+  image: quay.io/podman/stable
+  extends: .registry
+  script:
+    - podman pull ${CI_REGISTRY_IMAGE}:dev-stage || true
+    - >
+      podman build 
+      --pull
+      -f Dockerfile-dev
+      --cache-from ${CI_REGISTRY_IMAGE}:dev-stage
+      --tag ${CI_REGISTRY_IMAGE}:dev-stage
+      .
+    - podman push ${CI_REGISTRY_IMAGE}:dev-stage
+
+tests:
+  stage: tests
+  image: ${CI_REGISTRY_IMAGE}:dev-stage
+  script:
+    - cd /app
+    - npm run test:ci
+    - cat /app/test_out/cobertura-coverage.xml
+    - cat /app/test_out/junit.xml
+    - cp -r /app/test_out $CI_PROJECT_DIR
+  artifacts:
+    reports:
+      cobertura: test_out/cobertura-coverage.xml
+      junit: test_out/junit.xml
+   
+
 build:
   stage: build
   image: quay.io/podman/stable
@@ -19,9 +50,8 @@ build:
     - >
       podman build 
       --pull
-      --build-arg http_proxy=$http_proxy
-      --build-arg https_proxy=$https_proxy
-      --build-arg no_proxy=$no_proxy
+      --build-arg APPVER=dev-stage
+      --build-arg APPIMAGE=${CI_REGISTRY_IMAGE}
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:dev
       .
