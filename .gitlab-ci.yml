@@ -16,19 +16,19 @@ buildapp:
   image: quay.io/podman/stable
   extends: .registry
   script:
-    - podman pull ${CI_REGISTRY_IMAGE}:dev-stage || true
+    - podman pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev || true
     - >
       podman build 
       --pull
       -f Dockerfile-dev
-      --cache-from ${CI_REGISTRY_IMAGE}:dev-stage
-      --tag ${CI_REGISTRY_IMAGE}:dev-stage
+      --cache-from ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
+      --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       .
-    - podman push ${CI_REGISTRY_IMAGE}:dev-stage
+    - podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
 
 tests:
   stage: tests
-  image: ${CI_REGISTRY_IMAGE}:dev-stage
+  image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
   script:
     - cd /app
     - npm run test:ci
@@ -48,7 +48,7 @@ build:
     - >
       podman build 
       --pull
-      --build-arg APPVER=dev-stage
+      --build-arg APPVER=${CI_COMMIT_SHORT_SHA}-dev
       --build-arg APPIMAGE=${CI_REGISTRY_IMAGE}
       --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:dev
