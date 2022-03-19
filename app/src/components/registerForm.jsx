@@ -73,7 +73,7 @@ function RegisterForm() {
         setInputs(values => ({...values, [name]: value}));
     };
     return (
-        <fragments>
+        <React.Fragment>
         <h1>Register Form</h1>
         <form onSubmit={handleSubmit}>
           login: <input name="login" onChange={handleChange}/><br/>
@@ -84,7 +84,7 @@ function RegisterForm() {
           password2: <input type="password" name="password2" onChange={handleChange}/><br/>
           <button type="submit">Submit</button>
         </form>
-        </fragments>
+        </React.Fragment>
     );
 }
 
