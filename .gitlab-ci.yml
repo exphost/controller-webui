@@ -5,6 +5,7 @@ stages:
   - build
   - push
   - deploy
+  - cleanup
 
 
 .registry:
@@ -16,15 +17,19 @@ buildapp:
   image: quay.io/podman/stable
   extends: .registry
   script:
-    - podman pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev || true
+    - podman --root podman pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev || true
     - >
-      podman build 
+      podman --root podman build 
       --pull
       -f Dockerfile-dev
       --cache-from ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       .
-    - podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
+    - podman --root podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - podman
 
 tests:
   stage: tests
@@ -81,3 +86,65 @@ push tag:
     - podman pull $CI_REGISTRY_IMAGE:dev
     - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
     - podman push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+
+deploy branch:
+  stage: deploy
+  image:
+    name: alpine/helm
+  environment:
+    name: dev/$CI_COMMIT_REF_SLUG
+    on_stop: delete_app
+    url: https://$KUBE_NAMESPACE.ci.exphost.pl
+  before_script:
+  - helm repo add exphost https://gitlab.exphost.pl/charts
+  - helm repo add dex https://charts.dexidp.io
+  - helm repo update
+  script:
+#  - export VERSION=$(git describe --tags)
+#  - sed -i "s/__VERSION__/$VERSION/" chart/Chart.yaml
+  - echo "CI_ENVIRONMENT_SLUG $CI_ENVIRONMENT_SLUG"
+  - echo "CI_ENVIRONMENT_SLUG $CI_ENVIRONMENT_SLUG"
+  - echo "KUBE_NAMESPACE $KUBE_NAMESPACE"
+  - >
+    helm upgrade -n $KUBE_NAMESPACE -i ldap exphost/openldap -f gitlab-ci-values.yml
+    --set podAnnotations."app\.gitlab\.com/app"=$CI_PROJECT_PATH_SLUG
+    --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
+    --wait --wait-for-jobs
+  - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values-dex.yml
+  - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values.yml
+  - >
+    helm upgrade -n $KUBE_NAMESPACE -i auth dex/dex -f gitlab-ci-values-dex.yml
+    --set podAnnotations."app\.gitlab\.com/app"=$CI_PROJECT_PATH_SLUG
+    --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
+    --wait --wait-for-jobs
+  - >
+    helm upgrade -n $KUBE_NAMESPACE -i test-controller exphost/exphost-controller -f gitlab-ci-values.yml
+    --set podAnnotations."app\.gitlab\.com/app"=$CI_PROJECT_PATH_SLUG
+    --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
+    --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
+    --wait --wait-for-jobs
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+delete_app:
+  stage: cleanup
+  image:
+    name: alpine/helm
+  script:
+    - helm uninstall -n $KUBE_NAMESPACE ldap --wait
+    - helm uninstall -n $KUBE_NAMESPACE auth --wait
+    - helm uninstall -n $KUBE_NAMESPACE test-controller --wait
+  variables:
+    GIT_STRATEGY: none
+  environment:
+    name: dev/$CI_COMMIT_REF_SLUG
+    action: stop
+  needs:
+    - deploy branch
+  when: manual
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    - if: $CI_COMMIT_BRANCH
