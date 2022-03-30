@@ -7,8 +7,9 @@ usersservice:
     password:
       password: pass123
 webui:
-  image:
-    tag: dev
+  enabled: false
+#  image:
+#    tag: dev
 gateway:
   image:
     tag: dev

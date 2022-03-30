@@ -1,0 +1,9 @@
+image:
+  name: registry.gitlab.exphost.pl/exphost-controller/webui
+  pullPolicy: Always
+  tag: v0.1.1
+ingress:
+  annotations:
+    cert-manager.io/cluster-issuer: acme-issuer
+global:
+  domain: example.com

@@ -26,6 +26,11 @@ buildapp:
       --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       .
     - podman --root podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
+  only:
+    changes:
+      - app
+      - Dockerfile
+      - nginx
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -42,6 +47,11 @@ tests:
     reports:
       cobertura: test_out/cobertura-coverage.xml
       junit: test_out/junit.xml
+  only:
+    changes:
+      - app
+      - Dockerfile
+      - nginx
    
 
 build:
@@ -60,6 +70,11 @@ build:
       .
 
     - podman push $CI_REGISTRY_IMAGE:dev
+  only:
+    changes:
+      - app
+      - Dockerfile
+      - nginx
 
 push latest:
   variables:
@@ -73,6 +88,11 @@ push latest:
     - podman pull $CI_REGISTRY_IMAGE:dev
     - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:latest
     - podman push $CI_REGISTRY_IMAGE:latest
+  only:
+    changes:
+      - app
+      - Dockerfile
+      - nginx
 
 push tag:
   variables:
@@ -86,6 +106,11 @@ push tag:
     - podman pull $CI_REGISTRY_IMAGE:dev
     - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
     - podman push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  only:
+    changes:
+      - app
+      - Dockerfile
+      - nginx
 
 deploy branch:
   stage: deploy
@@ -105,20 +130,21 @@ deploy branch:
   - echo "CI_ENVIRONMENT_SLUG $CI_ENVIRONMENT_SLUG"
   - echo "CI_ENVIRONMENT_SLUG $CI_ENVIRONMENT_SLUG"
   - echo "KUBE_NAMESPACE $KUBE_NAMESPACE"
-  - >
-    helm upgrade -n $KUBE_NAMESPACE -i ldap exphost/openldap -f gitlab-ci-values.yml
-    --set podAnnotations."app\.gitlab\.com/app"=$CI_PROJECT_PATH_SLUG
-    --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
-    --wait --wait-for-jobs
   - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values-dex.yml
   - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values.yml
   - >
+    helm upgrade -n $KUBE_NAMESPACE -i ldap exphost/openldap -f gitlab-ci-values.yml
+    --wait --wait-for-jobs
+  - >
     helm upgrade -n $KUBE_NAMESPACE -i auth dex/dex -f gitlab-ci-values-dex.yml
-    --set podAnnotations."app\.gitlab\.com/app"=$CI_PROJECT_PATH_SLUG
-    --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
     --wait --wait-for-jobs
   - >
     helm upgrade -n $KUBE_NAMESPACE -i test-controller exphost/exphost-controller -f gitlab-ci-values.yml
+    --version v0.3.0-1-gfa75265
+    --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
+    --wait --wait-for-jobs
+  - >
+    helm upgrade -n $KUBE_NAMESPACE -i test-webui chart -f gitlab-ci-values-webui.yml
     --set podAnnotations."app\.gitlab\.com/app"=$CI_PROJECT_PATH_SLUG
     --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
     --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
@@ -136,6 +162,7 @@ delete_app:
     - helm uninstall -n $KUBE_NAMESPACE ldap --wait
     - helm uninstall -n $KUBE_NAMESPACE auth --wait
     - helm uninstall -n $KUBE_NAMESPACE test-controller --wait
+    - helm uninstall -n $KUBE_NAMESPACE test-webui --wait
   variables:
     GIT_STRATEGY: none
   environment:
