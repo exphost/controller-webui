@@ -1,3 +1,5 @@
+include:
+  - https://gitlab.exphost.pl/exphost/exphost-helms/-/raw/master/common/gitlab-ci.yml
 stages:
   - prepare
   - build_app
@@ -6,7 +8,7 @@ stages:
   - push
   - deploy
   - cleanup
-
+  - upload
 
 .registry:
   before_script:
@@ -175,3 +177,10 @@ delete_app:
     - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
       when: never
     - if: $CI_COMMIT_BRANCH
+
+upload:
+  extends: .upload
+  only:
+    refs:
+      - tags
+      - master
