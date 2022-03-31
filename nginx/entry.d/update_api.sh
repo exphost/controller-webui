@@ -9,5 +9,5 @@ if [ -n "$AUTHURL" ]; then
 fi
 if [ -n "$AUTHSECRET" ]; then
     echo "Updating AUTH_SECRET to $AUTHSECRET"
-    sed -i "s/window.AUTH_SECRET =.*/window.AUTH_SECRET = \"$AUTHSECRET\"/" /usr/share/nginx/html/env_vars.js
+    sed -i "s,window.AUTH_SECRET =.*,window.AUTH_SECRET = \"$AUTHSECRET\"," /usr/share/nginx/html/env_vars.js
 fi

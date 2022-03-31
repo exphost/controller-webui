@@ -81,13 +81,13 @@ push latest:
   image: quay.io/podman/stable
   stage: push
   extends: .registry
-  only:
-    - master
   script:
     - podman pull $CI_REGISTRY_IMAGE:dev
     - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:latest
     - podman push $CI_REGISTRY_IMAGE:latest
   only:
+    refs:
+      - master
     changes:
       - app/**/*
       - Dockerfile
@@ -99,13 +99,13 @@ push tag:
   image: quay.io/podman/stable
   stage: push
   extends: .registry
-  only:
-    - tags
   script:
     - podman pull $CI_REGISTRY_IMAGE:dev
     - podman tag $CI_REGISTRY_IMAGE:dev $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
     - podman push $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
   only:
+    refs:
+      - tags
     changes:
       - app
       - Dockerfile
