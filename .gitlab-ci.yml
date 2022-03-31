@@ -28,9 +28,9 @@ buildapp:
     - podman --root podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
   only:
     changes:
-      - app
+      - app/**/*
       - Dockerfile
-      - nginx
+      - nginx/**/*
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -49,11 +49,10 @@ tests:
       junit: test_out/junit.xml
   only:
     changes:
-      - app
+      - app/**/*
       - Dockerfile
-      - nginx
+      - nginx/**/*
    
-
 build:
   stage: build
   image: quay.io/podman/stable
@@ -72,9 +71,9 @@ build:
     - podman push $CI_REGISTRY_IMAGE:dev
   only:
     changes:
-      - app
+      - app/**/*
       - Dockerfile
-      - nginx
+      - nginx/**/*
 
 push latest:
   variables:
@@ -90,9 +89,9 @@ push latest:
     - podman push $CI_REGISTRY_IMAGE:latest
   only:
     changes:
-      - app
+      - app/**/*
       - Dockerfile
-      - nginx
+      - nginx/**/*
 
 push tag:
   variables:
@@ -131,6 +130,7 @@ deploy branch:
   - echo "CI_ENVIRONMENT_SLUG $CI_ENVIRONMENT_SLUG"
   - echo "KUBE_NAMESPACE $KUBE_NAMESPACE"
   - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values-dex.yml
+  - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values-webui.yml
   - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values.yml
   - >
     helm upgrade -n $KUBE_NAMESPACE -i ldap exphost/openldap -f gitlab-ci-values.yml

@@ -7,3 +7,7 @@ ingress:
     cert-manager.io/cluster-issuer: acme-issuer
 global:
   domain: example.com
+endpoints:
+  authendpoint:
+    url: "https://auth.example.com/dex"
+    # secret:
