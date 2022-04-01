@@ -135,10 +135,10 @@ deploy branch:
   - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values-webui.yml
   - sed -i "s/__DOMAIN__/${KUBE_NAMESPACE}.ci.exphost.pl/" gitlab-ci-values.yml
   - >
-    helm upgrade -n $KUBE_NAMESPACE -i ldap exphost/openldap -f gitlab-ci-values.yml
+    helm upgrade -n $KUBE_NAMESPACE -i auth dex/dex -f gitlab-ci-values-dex.yml
     --wait --wait-for-jobs
   - >
-    helm upgrade -n $KUBE_NAMESPACE -i auth dex/dex -f gitlab-ci-values-dex.yml
+    helm upgrade -n $KUBE_NAMESPACE -i ldap exphost/openldap -f gitlab-ci-values.yml
     --wait --wait-for-jobs
   - >
     helm upgrade -n $KUBE_NAMESPACE -i test-controller exphost/exphost-controller -f gitlab-ci-values.yml
