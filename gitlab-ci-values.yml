@@ -15,7 +15,7 @@ gateway:
     tag: dev
   endpoints:
     authendpoint: "https://auth.__DOMAIN__/dex"
-    usersservice: "http://test-controller-usersservice:5000/users/users/"
+    usersservice: "http://test-controller-usersservice:5000/users/"
 
 adminPassword:
   password: "pass123"
