@@ -10,44 +10,26 @@ const Console = () => {
   const [count, setCount] = useState(0);
   const [name, setName] = useState("Marcin");
   const [user, setUser] = useState({});
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    setCount((currentCount2) => currentCount2 + 5)
-    if(!user.name) {
-      console.log("No user");
-      navigate("register")
+  function getUserInfo() {
+    if(cookies.accessToken) {
+      if(user.name != "Dummy user") {
+        setUser({name: "Dummy user"})
+      }
     }
-  }, [])
+  }
 
- //const handleChangeName = () => setName((currentName) => "Kasia");
- //const handleIncrement = () => setCount((currentCount321) => currentCount321 + 1);
-
- //const handleDecrement = () => setCount((currentCount123) => currentCount123 - 1);
+  getUserInfo()
+  if(!user.name) {
+    console.log("No user, showing login/register");
+    return(
+      <LoginOrRegister/>
+    )
+  }
 
   return (
-    <Routes path="/*">
-      <Route index element={<h1>Console</h1>}/>
-      <Route path="register" element={<LoginOrRegister/>}/>
-    </Routes>
-//   <div className="counter">
-//     <h1 className="count">{count}</h1>
-//     <h1 className="name">{name}</h1>
-//
-//     <button type="button" onClick={handleIncrement}>
-//       Increment
-//     </button>
-//     <button type="button" onClick={handleDecrement}>
-//       Decrement
-//     </button>
-//     <button type="button" onClick={handleChangeName}>
-//       Name
-//     </button>
-//   </div>
- );
-//  return (
-//    <h1>Console</h1>
-//  );
+    <h1>Consolee</h1>
+    )
 }
 
 export default Console;

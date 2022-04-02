@@ -2,18 +2,26 @@ import { render, screen, waitFor, getByText} from '@testing-library/react';
 import Console from './Console';
 import { LoginOrRegister } from './components/loginregister';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+//import Cookies from 'universal-cookie';
+import { Cookies, useCookies, withCookies, CookiesProvider } from 'react-cookie';
 
 test('show login/register page if not logged', () => {
   render(
-    <BrowserRouter>
-    <Routes>
-      <Route path="/*" element={<Console/>}/>
-    </Routes>
-    </BrowserRouter>
+    <Console/>
   )
-  const registerElement = screen.getByText(/register/i);
-  expect(registerElement).toBeInTheDocument();
-  const loginElement = screen.getAllByText(/login/i);
-  expect(loginElement[0]).toBeInTheDocument();
+  expect(screen.getByText(/register/i)).toBeInTheDocument();
+  expect(screen.getAllByText(/login/i)[0]).toBeInTheDocument();
+});
+
+test('show console page when logged in', () => {
+  const cookies = new Cookies()
+  cookies.set("accessToken", "sometoken")
+  render(
+    <CookiesProvider cookies={cookies}>
+      <Console/>
+    </CookiesProvider>
+  )
+  expect(screen.queryByText(/register/i)).not.toBeInTheDocument();
+  expect(() => screen.getByText(/login/i)).toThrow();
 });
 
