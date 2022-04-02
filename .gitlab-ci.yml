@@ -125,6 +125,9 @@ deploy branch:
   - helm repo add exphost https://gitlab.exphost.pl/charts
   - helm repo add dex https://charts.dexidp.io
   - helm repo update
+  - apk add --no-cache ca-certificates git curl
+  - curl -L "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" -o /usr/local/bin/kubectl
+  - chmod +x /usr/local/bin/kubectl
   script:
 #  - export VERSION=$(git describe --tags)
 #  - sed -i "s/__VERSION__/$VERSION/" chart/Chart.yaml
@@ -151,6 +154,7 @@ deploy branch:
     --set podAnnotations."app\.gitlab\.com/env"=$CI_ENVIRONMENT_SLUG
     --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
     --wait --wait-for-jobs
+  - kubectl -n $KUBE_NAMESPACE rollout restart deployment test-webui-controller-webui
   rules:
     - if: $CI_COMMIT_BRANCH
 
