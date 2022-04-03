@@ -156,7 +156,9 @@ deploy branch:
     --wait --wait-for-jobs
   - kubectl -n $KUBE_NAMESPACE rollout restart deployment test-webui-controller-webui
   rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
     - if: $CI_COMMIT_BRANCH
+      when: manual
 
 delete_app:
   stage: cleanup
