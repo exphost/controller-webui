@@ -10,7 +10,9 @@ test('show login/register page if not logged', () => {
     <Console/>
   )
   expect(screen.getByText(/register/i)).toBeInTheDocument();
-  expect(screen.getAllByText(/login/i)[0]).toBeInTheDocument();
+  let login = screen.getByRole("link", {name: /login/i})
+  expect(login).toBeInTheDocument();
+  expect(login).toHaveAttribute("href", "/login");
 });
 
 test('show console page when logged in', () => {

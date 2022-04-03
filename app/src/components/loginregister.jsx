@@ -1,7 +1,7 @@
 import RegisterForm from '../components/registerForm';
 function LoginOrRegister() {
   return <div>
-    Login<br/>
+    <a href="/login">Login</a><br/>
     or<br/>
     <RegisterForm/>
   </div>
