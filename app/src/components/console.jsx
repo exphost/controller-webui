@@ -2,13 +2,11 @@ import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { Component, useState, useEffect } from 'react';
 import { useCookies } from "react-cookie";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RegisterPage from './pages/Register';
-import { LoginOrRegister } from './components/loginregister';
+import { LoginOrRegister } from '../components/loginregister';
 
 const Console = () => {
   const [cookies, setCookie] = useCookies();
   const [count, setCount] = useState(0);
-  const [name, setName] = useState("Marcin");
   const [user, setUser] = useState({});
 
   function getUserInfo() {
@@ -23,12 +21,11 @@ const Console = () => {
   if(!user.name) {
     console.log("No user, showing login/register");
     return(
-      <LoginOrRegister/>
+        <Navigate to='register'/>
     )
   }
-
   return (
-    <h1>Consolee</h1>
+    <h1>Consoleeeee</h1>
     )
 }
 
