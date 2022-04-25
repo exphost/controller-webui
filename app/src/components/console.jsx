@@ -3,6 +3,7 @@ import { Component, useState, useEffect } from 'react';
 import { useCookies } from "react-cookie";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LoginOrRegister } from '../components/loginregister';
+import React from 'react';
 
 const Console = () => {
   const [cookies, setCookie] = useCookies();
@@ -19,13 +20,18 @@ const Console = () => {
 
   getUserInfo()
   if(!user.name) {
-    console.log("No user, showing login/register");
     return(
         <Navigate to='register'/>
     )
   }
   return (
+    <React.Fragment>
     <h1>Consoleeeee</h1>
+    <h2>Apps</h2>
+    <ul>
+    <li><Link to='/console/apps/nginx'>Nginx</Link></li>
+    </ul>
+    </React.Fragment>
     )
 }
 

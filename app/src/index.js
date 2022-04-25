@@ -6,6 +6,8 @@ import ConsolePage from './pages/ConsolePage';
 import { LoginPageCallback } from './pages/LoginPage';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import RegisterPage from './pages/Register';
+import { LoginPageRedirect } from './pages/LoginPage';
 
 //ReactDOM.render(
 //  <React.StrictMode>
@@ -21,6 +23,8 @@ export default function App() {
       <Routes>
         <Route path="/">
           <Route index element={<App2 />} />
+          <Route path="console/login" element={<LoginPageRedirect/> }/>
+          <Route path="console/register" element={<RegisterPage/> }/>
           <Route path="console/*" element={<ConsolePage />}/>
           <Route path="oauth2/callback" element={<LoginPageCallback />} />
         </Route>

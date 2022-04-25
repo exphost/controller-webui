@@ -28,11 +28,6 @@ buildapp:
       --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       .
     - podman --root podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
-  only:
-    changes:
-      - app/**/*
-      - Dockerfile
-      - nginx/**/*
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -49,11 +44,6 @@ tests:
     reports:
       cobertura: test_out/cobertura-coverage.xml
       junit: test_out/junit.xml
-  only:
-    changes:
-      - app/**/*
-      - Dockerfile
-      - nginx/**/*
    
 build:
   stage: build
@@ -71,11 +61,6 @@ build:
       .
 
     - podman push $CI_REGISTRY_IMAGE:dev
-  only:
-    changes:
-      - app/**/*
-      - Dockerfile
-      - nginx/**/*
 
 push latest:
   variables:
@@ -90,10 +75,6 @@ push latest:
   only:
     refs:
       - master
-    changes:
-      - app/**/*
-      - Dockerfile
-      - nginx/**/*
 
 push tag:
   variables:
@@ -108,10 +89,6 @@ push tag:
   only:
     refs:
       - tags
-    changes:
-      - app
-      - Dockerfile
-      - nginx
 
 deploy branch:
   stage: deploy
@@ -145,7 +122,7 @@ deploy branch:
     --wait --wait-for-jobs
   - >
     helm upgrade -n $KUBE_NAMESPACE -i test-controller exphost/exphost-controller -f gitlab-ci-values.yml
-    --version v0.3.0-1-gfa75265
+    --version v0.3.0-13-gf238443
     --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
     --wait --wait-for-jobs
   - >
@@ -155,10 +132,6 @@ deploy branch:
     --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
     --wait --wait-for-jobs
   - kubectl -n $KUBE_NAMESPACE rollout restart deployment test-webui-controller-webui
-  rules:
-    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
-    - if: $CI_COMMIT_BRANCH
-      when: manual
 
 delete_app:
   stage: cleanup
