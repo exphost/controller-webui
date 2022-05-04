@@ -41,7 +41,8 @@ test('submit nginx app', async () => {
     'Access-Control-Allow-Origin': '*',
     'Content-type': 'application/json'
   });
-  render(<AppNginx/>)
+  render(<AppNginx org="qwe"/>)
+  expect(screen.getByTestId("nginx-add-org")).toHaveDisplayValue("qwe")
   fireEvent.change(screen.getByTestId("nginx-add-name"), {target: {value: "test-aa"}})
   fireEvent.click(screen.getByText("Create"))
   await waitFor(() => expect(screen.getByTestId("nginx-add-message")).toHaveTextContent("added"))

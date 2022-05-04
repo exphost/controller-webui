@@ -55,15 +55,9 @@ function RegisterForm() {
             .request(requestOptions)
             .then(function (response) {
                 const res = response.data; // Response received from the API
-                console.log("A");
-                console.log(response);
-                console.log("B");
-                console.log(res);
-                console.log("C");
                 alert("Submit successfuly");
             })
             .catch(function (error) {
-                console.error(error.response);
                 alert("Submit failed")
             });
     };

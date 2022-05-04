@@ -36,11 +36,9 @@ export function LoginPageCallback() {
       "code="+params.get('code')+"&"+
       "redirect_uri="+window.location.origin+"/oauth2/callback"
   }
-  console.log("AUTH_URL: " + localStorage.getItem("AUTH_URL"))
   fetch(localStorage.getItem("AUTH_URL")+'/token', requestOptions)
     .then(response => response.json())
     .then(data => (
-      console.log(data),
       setCookie('accessToken', data['access_token'], {
         path: '/',
         secure: true,

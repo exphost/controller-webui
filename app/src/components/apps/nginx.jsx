@@ -1,9 +1,9 @@
 import React, { useState} from 'react';
 import axios from 'axios';
 
-function AppNginx() {
+function AppNginx(props) {
     const [input, setInputs] = useState({
-        name: ""
+        name: "",
     })
     const [message, setMessage] = useState("")
     const handleSubmit = (event) => {
@@ -19,7 +19,7 @@ function AppNginx() {
         const query = JSON.stringify({
           query: `mutation {
                     appNginxCreate(name: "${input["name"]}",
-                                   org: "webui-hardcoded-org"
+                                   org: "${props.org}"
                                   )
                         {
                             nginx {
@@ -41,9 +41,6 @@ function AppNginx() {
             .request(requestOptions)
             .then(function (response) {
                 const res = response.data; // Response received from the API
-                console.log("A");
-                console.log(res);
-                console.log("B");
                 if(res.data.appNginxCreate.error && 
                    res.data.appNginxCreate.error.includes("already exists")) {
                     setMessage("error 1: already exists")
@@ -53,16 +50,10 @@ function AppNginx() {
                     setMessage("error 2: submit failed")
                     return 2
                 }
-                console.log(response);
-                //console.log("B");
-                //console.log(res);
-                //console.log("C");
-                //alert("Submit successfuly");
                 setMessage("added")
                 return 0
             })
             .catch(function (err) {
-                console.error(err);
                 setMessage("error 3: submit error")
                 //alert("Submit failed")
             });
@@ -81,6 +72,7 @@ function AppNginx() {
         <div data-testid='nginx-add-message'>{ message }</div>
         <form onSubmit={handleSubmit}>
             name: <input data-testid="nginx-add-name" name="name" onChange={handleChange}/><br/>
+            <input data-testid="nginx-add-org" name="org" type="hidden" value={props.org}/>
             <button data-testid="nginx-add-submit" type="subbmit">Create</button>
         </form>
         </React.Fragment>

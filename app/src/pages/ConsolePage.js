@@ -8,16 +8,18 @@ import AppNginx from '../components/apps/nginx';
 import RegisterPage from './Register';
 import UserInfo from '../components/userinfo';
 import axios from 'axios';
+import httpAdapter from 'axios/lib/adapters/http'
 import { LoginPageRedirect } from './LoginPage';
 
 const ConsolePage = () => {
   const [cookies, setCookie] = useCookies();
   const [user, setUser] = useState('initial');
+  const [org, setOrg] = useState('ini');
   const navigate = useNavigate();
 
   function getUserInfo() {
         const query = JSON.stringify({
-          query: `query {
+          query: `{
 					user {
                       user {
 						sn
@@ -42,14 +44,6 @@ const ConsolePage = () => {
             .request(requestOptions)
             .then(function (response) {
                 const res = response.data; // Response received from the API
-                console.log("A");
-                console.log(res);
-                console.log("B");
-                console.log(response);
-                //console.log("B");
-                //console.log(res);
-                //console.log("C");
-                //alert("Submit successfuly");
                 if(res.data.user.error) {
                     setUser({})
                 }
@@ -57,7 +51,6 @@ const ConsolePage = () => {
                 return 0
             })
             .catch(function (err) {
-                console.error(err);
       			setUser({})
                 //alert("Submit failed")
             });
@@ -68,15 +61,14 @@ const ConsolePage = () => {
   }, []);
 
   useEffect(() => {
-    console.log("not logged?", user)
     if(user == "initial") {
-        console.log("initial")
         return
     }
     if(!user.login) {
-        console.log("redirect")
         navigate('register')
     }
+    else
+        setOrg(user.groups[0])
   }, [user])
 
   return (
@@ -88,7 +80,7 @@ const ConsolePage = () => {
           <Route index element={<Console/> }/>
 //          <Route path="login" element={<LoginPageRedirect/> }/>
 //          <Route path="register" element={<RegisterPage/> }/>
-          <Route path='apps/nginx' element={<AppNginx/> }/>
+          <Route path='apps/nginx' element={<AppNginx org={org}/> }/>
           <Route path='*' element={<Navigate to='/console'/>}/>
         </Route>
       </Routes>

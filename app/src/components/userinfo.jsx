@@ -4,7 +4,6 @@ function UserInfo(props) {
     const groups = []
     if(props.user.groups)
         props.user.groups.forEach((group) => groups.push(<option key={group} value={group}>{group}</option>))
-    console.log(groups)
     return (
         <React.Fragment>
         userinfo
