@@ -1,7 +1,7 @@
-import { Link } from 'react-router-dom';
-import RegisterForm from '../components/registerForm';
-function LoginOrRegister() {
-  
+import React from 'react'
+import { Link } from 'react-router-dom'
+import RegisterForm from '../components/registerForm'
+function LoginOrRegister () {
   return <div>
     <Link to='/console/login'>Login</Link><br/>
     or<br/>
@@ -9,4 +9,4 @@ function LoginOrRegister() {
   </div>
 }
 
-export { LoginOrRegister };
+export { LoginOrRegister }

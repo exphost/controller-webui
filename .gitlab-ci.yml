@@ -48,6 +48,13 @@ tests:
     reports:
       cobertura: test_out/cobertura-coverage.xml
       junit: test_out/junit.xml
+
+lint:
+  stage: tests
+  image: ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
+  script:
+    - cd /app
+    - npm run lint
    
 build:
   stage: build

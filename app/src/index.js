@@ -1,23 +1,21 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App2 from './App';
-import ConsolePage from './pages/ConsolePage';
-import { LoginPageCallback } from './pages/LoginPage';
-import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import RegisterPage from './pages/Register';
-import { LoginPageRedirect } from './pages/LoginPage';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import App2 from './App'
+import ConsolePage from './pages/ConsolePage'
+import { LoginPageCallback, LoginPageRedirect } from './pages/LoginPage'
+import reportWebVitals from './reportWebVitals'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import RegisterPage from './pages/Register'
 
-//ReactDOM.render(
+// ReactDOM.render(
 //  <React.StrictMode>
 //    <App />
 //  </React.StrictMode>,
 //  document.getElementById('root')
-//);
+// );
 
-
-export default function App() {
+export default function App () {
   return (
     <BrowserRouter>
       <Routes>
@@ -28,15 +26,14 @@ export default function App() {
           <Route path="console/*" element={<ConsolePage />}/>
           <Route path="oauth2/callback" element={<LoginPageCallback />} />
         </Route>
-      </Routes> 
+      </Routes>
     </BrowserRouter>
-  );
+  )
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
-
+ReactDOM.render(<App />, document.getElementById('root'))
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+reportWebVitals()

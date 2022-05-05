@@ -1,10 +1,10 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
-function UserInfo(props) {
-    const groups = []
-    if(props.user.groups)
-        props.user.groups.forEach((group) => groups.push(<option key={group} value={group}>{group}</option>))
-    return (
+function UserInfo (props) {
+  const groups = []
+  if (props.user.groups) { props.user.groups.forEach((group) => groups.push(<option key={group} value={group}>{group}</option>)) }
+  return (
         <React.Fragment>
         userinfo
         <ul>
@@ -18,7 +18,17 @@ function UserInfo(props) {
         </ul>
         </React.Fragment>
 
-    )
+  )
 }
 
-export default UserInfo;
+UserInfo.propTypes = {
+  user: PropTypes.shape({
+    login: PropTypes.string,
+    gn: PropTypes.string,
+    sn: PropTypes.string,
+    mail: PropTypes.string,
+    groups: PropTypes.arrayOf(PropTypes.string)
+  }).isRequired
+}
+
+export default UserInfo

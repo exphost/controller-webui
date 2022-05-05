@@ -1,12 +1,11 @@
-import './Register.css';
-import RegisterForm from '../components/registerForm';
-import { LoginOrRegister } from '../components/loginregister';
+import React from 'react'
+import './Register.css'
+import { LoginOrRegister } from '../components/loginregister'
 
-function RegisterPage() {
+function RegisterPage () {
   return (
     <LoginOrRegister/>
-//    <RegisterForm/>
-  );
+  )
 }
 
-export default RegisterPage;
+export default RegisterPage
