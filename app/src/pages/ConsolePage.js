@@ -1,7 +1,7 @@
 import { Link, Navigate, useNavigate, Routes, Route } from 'react-router-dom'
 import React, { useState, useEffect } from 'react'
 import Console from '../components/console'
-import AppNginx from '../components/apps/nginx'
+import AppNginx from '../components/apps/appNginx'
 import UserInfo from '../components/userinfo'
 import axios from 'axios'
 import RegisterPage from './Register'

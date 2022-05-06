@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import PropTypes from 'prop-types'
 
-function AppNginx (props) {
+function AppNginxAdd (props) {
   const [input, setInputs] = useState({
     name: ''
   })
@@ -81,8 +81,8 @@ function AppNginx (props) {
   )
 }
 
-AppNginx.propTypes = {
+AppNginxAdd.propTypes = {
   org: PropTypes.string.isRequired
 }
 
-export default AppNginx
+export default AppNginxAdd
