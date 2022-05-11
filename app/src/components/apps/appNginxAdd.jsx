@@ -17,11 +17,21 @@ function AppNginxAdd (props) {
         return 2
       }
     }
+    let values = `name: "${input.name}",
+              org: "${props.org}"`
+    if (input.gitrepo) {
+      let valuesGit = `repo: "${input.gitrepo}"`
+      if (input.gitbranch) {
+        valuesGit += `,branch: "${input.gitbranch}"`
+      }
+      values += `,git: {${valuesGit}}`
+    }
+    if (input.fqdn) {
+      values += `,fqdn: "${input.fqdn}"`
+    }
     const query = JSON.stringify({
       query: `mutation {
-                    appNginxCreate(name: "${input.name}",
-                                   org: "${props.org}"
-                                  )
+                    appNginxCreate(${values})
                         {
                             nginx {
                                 name,
@@ -74,6 +84,9 @@ function AppNginxAdd (props) {
         <div data-testid='nginx-add-message'>{ message }</div>
         <form onSubmit={handleSubmit}>
             name: <input data-testid="nginx-add-name" name="name" onChange={handleChange}/><br/>
+            git repo: <input data-testid="nginx-add-git-repo" name="gitrepo" onChange={handleChange}/><br/>
+            git branch: <input data-testid="nginx-add-git-branch" name="gitbranch" onChange={handleChange}/><br/>
+            fqdn: <input data-testid="nginx-add-git-branch" name="fqdn" onChange={handleChange}/><br/>
             <input data-testid="nginx-add-org" name="org" type="hidden" value={props.org}/>
             <button data-testid="nginx-add-submit" type="subbmit">Create</button>
         </form>
