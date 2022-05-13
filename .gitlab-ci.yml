@@ -145,6 +145,10 @@ deploy branch:
     --set global.domain=${KUBE_NAMESPACE}.ci.exphost.pl
     --wait --wait-for-jobs
   - kubectl -n $KUBE_NAMESPACE rollout restart deployment test-webui-controller-webui
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: never
+    - if: $CI_COMMIT_BRANCH
 
 delete_app:
   stage: cleanup
