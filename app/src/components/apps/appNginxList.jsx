@@ -8,8 +8,14 @@ function AppNginxList (props) {
   function loadApps () {
     const query = JSON.stringify({
       query: ` {
-                        nginx(org: "${props.org}") {                                    name,
+                        nginx(org: "${props.org}") {
+                                    name,
                                     org,
+                                    fqdn,
+                                    git {
+                                        repo,
+                                        branch
+                                    }
                                 },
                         }`
     })
@@ -30,6 +36,12 @@ function AppNginxList (props) {
                     <td>{ index }</td>
                     <td>{ app.name }</td>
                     <td>{ app.org }</td>
+                    <td>
+                      { app.fqdn ? app.fqdn : '' }
+                    </td>
+                    <td>
+                      { app.git ? app.git.repo + ' / ' + app.git.branch : '' }
+                    </td>
                 </tr>
         )))
         return 0
@@ -52,6 +64,8 @@ function AppNginxList (props) {
             <th>Id</th>
             <th>Name</th>
             <th>Org</th>
+            <th>Fqdn</th>
+            <th>Git</th>
           </tr></thead>
           <tbody>
           {apps}
