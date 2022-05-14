@@ -27,7 +27,7 @@ function AppNginxAdd (props) {
       values += `,git: {${valuesGit}}`
     }
     if (input.fqdn) {
-      values += `,fqdn: "${input.fqdn}"`
+      values += `,fqdns: ["${input.fqdn}"]`
     }
     const query = JSON.stringify({
       query: `mutation {
@@ -36,6 +36,7 @@ function AppNginxAdd (props) {
                             nginx {
                                 name,
                                 org,
+                                fqdns,
                             },
                             error
                         }

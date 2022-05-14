@@ -11,7 +11,7 @@ function AppNginxList (props) {
                         nginx(org: "${props.org}") {
                                     name,
                                     org,
-                                    fqdn,
+                                    fqdns,
                                     git {
                                         repo,
                                         branch
@@ -32,12 +32,16 @@ function AppNginxList (props) {
         const res = response.data // Response received from the API
 
         setApps(res.data.nginx.map((app, index) => (
-                <tr key={app.id}>
+                <tr key={app.index}>
                     <td>{ index }</td>
                     <td>{ app.name }</td>
                     <td>{ app.org }</td>
                     <td>
-                      { app.fqdn ? app.fqdn : '' }
+                      { app.fqdns
+                        ? <ul>
+                            { app.fqdns.map((fqdn, index) => <li key={index}>{fqdn}</li>)}
+                          </ul>
+                        : '' }
                     </td>
                     <td>
                       { app.git ? app.git.repo + ' / ' + app.git.branch : '' }

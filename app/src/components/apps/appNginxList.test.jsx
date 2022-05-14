@@ -13,12 +13,12 @@ test('list nginx apps', async () => {
             name: 'example-app1',
             org: 'test-org',
             git: null,
-            fqdn: null
+            fqdns: null
           },
           {
             name: 'example-app2',
             org: 'test-org',
-            fqdn: 'www.test.pl',
+            fqdns: ['www.test.pl', 'www.example.com'],
             git: {
               repo: 'https://github.com/test/test.git',
               branch: 'devel'
@@ -36,5 +36,6 @@ test('list nginx apps', async () => {
   await waitFor(() => expect(screen.getByText('example-app1')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('example-app2')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('www.test.pl')).toBeInTheDocument)
+  await waitFor(() => expect(screen.getByText('www.example.com')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('https://github.com/test/test.git / devel')).toBeInTheDocument)
 })
