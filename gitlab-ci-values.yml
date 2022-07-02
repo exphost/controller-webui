@@ -18,6 +18,10 @@ gateway:
     usersservice: "http://test-controller-usersservice:5000/users/"
     appsservice: "http://test-controller-appsservice:5000/"
 
+landingpage:
+  ingress:
+    hostname: __DOMAIN__
+
 appsservice:
   image:
     tag: dev

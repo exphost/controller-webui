@@ -4,4 +4,3 @@ endpoints:
   authendpoint:
     url: https://auth.__DOMAIN__/dex
     secret: Yp4fGf79FutdBDJArQqxhUiVbufVxjzu
-
