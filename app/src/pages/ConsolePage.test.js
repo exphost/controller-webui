@@ -10,21 +10,21 @@ import httpAdapter from 'axios/lib/adapters/http'
 
 test('show login/register page if not logged', async () => {
   render(
-    <MemoryRouter path="/console">
+    <MemoryRouter path="/">
         <ConsolePage/>
       </MemoryRouter>
   )
   await waitFor(() => expect(screen.getByText(/register/i)).toBeInTheDocument())
   const login = screen.getByRole('link', { name: /login/i })
   expect(login).toBeInTheDocument()
-  expect(login).toHaveAttribute('href', '/console/login')
+  expect(login).toHaveAttribute('href', '/login')
 })
 
 test('show console page when logged in', () => {
   const cookies = new Cookies()
   cookies.set('accessToken', 'sometoken')
   render(
-    <MemoryRouter path="/console">
+    <MemoryRouter path="/">
       <ConsolePage/>
     </MemoryRouter>
   )
@@ -35,7 +35,7 @@ test('show apps in console page', () => {
   const cookies = new Cookies()
   cookies.set('accessToken', 'sometoken')
   render(
-    <MemoryRouter path="/console">
+    <MemoryRouter path="/">
       <ConsolePage/>
     </MemoryRouter>
   )
@@ -68,7 +68,7 @@ test('show userinfo in console page', () => {
   const cookies = new Cookies()
   cookies.set('accessToken', 'sometoken')
   render(
-    <MemoryRouter path="/console">
+    <MemoryRouter path="/">
       <ConsolePage/>
     </MemoryRouter>
   )

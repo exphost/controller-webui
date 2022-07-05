@@ -1,7 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
-import App2 from './App'
 import ConsolePage from './pages/ConsolePage'
 import { LoginPageCallback, LoginPageRedirect } from './pages/LoginPage'
 import reportWebVitals from './reportWebVitals'
@@ -20,10 +19,10 @@ export default function App () {
     <BrowserRouter>
       <Routes>
         <Route path="/">
-          <Route index element={<App2 />} />
-          <Route path="console/login" element={<LoginPageRedirect/> }/>
-          <Route path="console/register" element={<RegisterPage/> }/>
-          <Route path="console/*" element={<ConsolePage />}/>
+          <Route index element={<ConsolePage />} />
+          <Route path="login" element={<LoginPageRedirect/> }/>
+          <Route path="register" element={<RegisterPage/> }/>
+          <Route path="*" element={<ConsolePage />}/>
           <Route path="oauth2/callback" element={<LoginPageCallback />} />
         </Route>
       </Routes>

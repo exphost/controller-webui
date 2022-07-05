@@ -7,7 +7,7 @@ const Console = () => {
     <h1>Consoleeeee</h1>
     <h2>Apps</h2>
     <ul>
-    <li><Link to='/console/apps/nginx'>Nginx</Link></li>
+    <li><Link to='/apps/nginx'>Nginx</Link></li>
     </ul>
     </React.Fragment>
   )

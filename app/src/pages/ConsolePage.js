@@ -66,13 +66,13 @@ const ConsolePage = () => {
 
   return (
     <React.Fragment>
-    <p><Link to='/console'>Console</Link></p>
+    <p><Link to='/'>Console</Link></p>
     <UserInfo user={user}/>
       <Routes>
         <Route>
           <Route index element={<Console/>}/>
           <Route path='apps/nginx' element={<AppNginx org={org}/> }/>
-          <Route path='*' element={<Navigate to='/console'/>}/>
+          <Route path='*' element={<Navigate to='/'/>}/>
           <Route path="register" element={<RegisterPage/> }/> {/* needed for tests :| */}
         </Route>
       </Routes>

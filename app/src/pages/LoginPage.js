@@ -50,7 +50,7 @@ export function LoginPageCallback () {
       localStorage.removeItem('AUTH_URL')
       localStorage.removeItem('AUTH_CLIENT_ID')
       localStorage.removeItem('AUTH_SECRET')
-      window.location.href = window.location.origin + '/console'
+      window.location.href = window.location.origin
     }
     )
 
