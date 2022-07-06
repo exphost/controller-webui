@@ -5,7 +5,6 @@ import nock from 'nock'
 
 test('show apps in console page', () => {
   render(<AppNginxAdd org="test-org"/>)
-  expect(screen.queryByText(/Nginx/i)).toBeInTheDocument()
   expect(screen.queryByText(/name/i)).toBeInTheDocument()
   expect(screen.queryByText(/git repo/i)).toBeInTheDocument()
   expect(screen.queryByText(/git branch/i)).toBeInTheDocument()

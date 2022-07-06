@@ -68,16 +68,38 @@ function RegisterForm () {
   }
   return (
         <React.Fragment>
-        <h1>Register Form</h1>
-        <form onSubmit={handleSubmit}>
-          login: <input name="login" onChange={handleChange}/><br/>
-          e-mail: <input type="email" name="mail" onChange={handleChange}/><br/>
-          name: <input name="gn" onChange={handleChange}/><br/>
-          surname: <input name="sn" onChange={handleChange}/><br/>
-          password: <input type="password" name="password" onChange={handleChange}/><br/>
-          password2: <input type="password" name="password2" onChange={handleChange}/><br/>
-          <button type="submit">Submit</button>
-        </form>
+        <div className='col-10 col-sm-8 col-md-6 col-lg-4 col-xl-3 container mb-3'>
+          <h2 className='text-center'>Register</h2>
+            <form onSubmit={handleSubmit}>
+              <div className='form-group'>
+                <label htmlFor='form_login'>login:</label>
+                <input className='form-control' id='form_login' name="login" onChange={handleChange}/>
+              </div>
+              <div className='form-group'>
+                <label htmlFor='form_email'>e-mail:</label>
+                 <input className='form-control' type="email" id='form_email' name="mail" onChange={handleChange}/>
+              </div>
+              <div className='form-group'>
+                <label htmlFor='form_name'>name:</label>
+                <input className='form-control' id='form_name' name="gn" onChange={handleChange}/>
+              </div>
+              <div className='form-group'>
+                <label htmlFor='form_surname'>surname:</label>
+                <input className='form-control' id='form_surname' name="sn" onChange={handleChange}/>
+              </div>
+              <div className='form-group'>
+                <label htmlFor='form_password1'>password:</label>
+                <input className='form-control' type="password" id='form_password1' name="password" onChange={handleChange}/>
+              </div>
+              <div className='form-group'>
+                <label htmlFor='form_password2'>confirm password:</label>
+                <input className='form-control' type="password" id='form_password2' name="password2" onChange={handleChange}/>
+              </div>
+              <div className='text-center'>
+              <button className='btn btn-primary mt-3' type="submit">Register</button>
+              </div>
+            </form>
+        </div>
         </React.Fragment>
   )
 }

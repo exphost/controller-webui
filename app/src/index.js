@@ -6,6 +6,7 @@ import { LoginPageCallback, LoginPageRedirect } from './pages/LoginPage'
 import reportWebVitals from './reportWebVitals'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import RegisterPage from './pages/Register'
+import 'bootstrap/dist/css/bootstrap.min.css'
 
 // ReactDOM.render(
 //  <React.StrictMode>
