@@ -8,5 +8,5 @@ EXPOSE 80
 COPY nginx/nginx.conf /etc/nginx/conf.d/default.conf
 COPY nginx/entry.d/ /docker-entrypoint.d/
 RUN echo "--from=${APPIMAGE}:${APPVER} /app/build/ /usr/share/nginx/html/"
-COPY --from=app /app/build/ /usr/share/nginx/html/
+COPY --from=app /app/build/ /usr/share/nginx/html/console
 

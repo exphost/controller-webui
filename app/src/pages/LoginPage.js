@@ -8,7 +8,7 @@ export function LoginPageRedirect () {
   localStorage.setItem('AUTH_CLIENT_ID', window.AUTH_CLIENT_ID)
   localStorage.setItem('AUTH_SECRET', window.AUTH_SECRET)
   useEffect(() => {
-    window.location.href = window.AUTH_URL + '/auth?client_id=' + window.AUTH_CLIENT_ID + '&redirect_uri=' + window.location.origin + '/oauth2/callback&scope=openid%20email profile groups offline_access&state=' + state + '&response_type=code'
+    window.location.href = window.AUTH_URL + '/auth?client_id=' + window.AUTH_CLIENT_ID + '&redirect_uri=' + window.location.origin + '/console/oauth2/callback&scope=openid%20email profile groups offline_access&state=' + state + '&response_type=code'
   }, [])
   return (
     <h1>Redirecting to auth service</h1>
@@ -32,7 +32,7 @@ export function LoginPageCallback () {
       'client_secret=' + localStorage.getItem('AUTH_SECRET') + '&' +
       'grant_type=authorization_code&' +
       'code=' + params.get('code') + '&' +
-      'redirect_uri=' + window.location.origin + '/oauth2/callback'
+      'redirect_uri=' + window.location.origin + '/console/oauth2/callback'
   }
   fetch(localStorage.getItem('AUTH_URL') + '/token', requestOptions)
     .then(response => response.json())
@@ -50,7 +50,7 @@ export function LoginPageCallback () {
       localStorage.removeItem('AUTH_URL')
       localStorage.removeItem('AUTH_CLIENT_ID')
       localStorage.removeItem('AUTH_SECRET')
-      window.location.href = window.location.origin
+      window.location.href = window.location.origin + '/console'
     }
     )
 

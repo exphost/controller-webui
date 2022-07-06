@@ -28,7 +28,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: APIURL
-              value: https://console.{{ .Values.global.domain }}
+              value: https://{{ .Values.global.domain }}
             - name: AUTHURL
               value: {{ .Values.endpoints.authendpoint.url }}
 {{- if .Values.endpoints.authendpoint.secret }}
