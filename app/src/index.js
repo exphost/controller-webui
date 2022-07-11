@@ -25,6 +25,7 @@ export default function App () {
           <Route path="register" element={<RegisterPage/> }/>
           <Route path="*" element={<ConsolePage />}/>
           <Route path="oauth2/callback" element={<LoginPageCallback />} />
+          <Route path="logout" element={<LogoutPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
