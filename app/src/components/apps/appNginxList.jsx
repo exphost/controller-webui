@@ -16,7 +16,7 @@ function AppNginxList (props) {
         <td>
           { app.fqdns
             ? <ul>
-                { app.fqdns.map((fqdn, index) => <li key={index}> <Link to={{ pathname: `https://${fqdn}` }} target="_blank" >{ fqdn }</Link></li>)}
+                { app.fqdns.map((fqdn, index) => <li key={index}> <a href={"https://" + fqdn} target="_blank" rel="noopener">{ fqdn }</a></li>)}
               </ul>
             : '' }
         </td>
