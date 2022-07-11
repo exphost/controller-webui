@@ -2,7 +2,6 @@ import React from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import AppNginxList from './appNginxList'
 import nock from 'nock'
-import { MemoryRouter } from 'react-router-dom'
 
 test('list nginx apps', async () => {
   nock('http://localhost:8080')
@@ -33,11 +32,7 @@ test('list nginx apps', async () => {
       'Content-type': 'application/json'
     })
   window.API_URL = 'http://localhost:8080'
-  render(
-    <MemoryRouter path="/console">
-      <AppNginxList org='test-org'/>
-    </MemoryRouter>
-  )
+  render(<AppNginxList org='test-org'/>)
   await waitFor(() => expect(screen.getByText('example-app1')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('example-app2')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('www.test.pl')).toBeInTheDocument)
