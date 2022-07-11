@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Table } from 'react-bootstrap'
 import axios from 'axios'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom';
 
 function AppNginxList (props) {
   const [apps, setApps] = useState(<tr><td>0</td><td span="2">Loading</td></tr>)
