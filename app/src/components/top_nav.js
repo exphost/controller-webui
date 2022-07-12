@@ -9,7 +9,7 @@ function TopNav (props) {
     <header>
 <Navbar bg="primary" expand="sm" variant="dark">
   <Container fluid>
-    <Link className='navbar-brand' to="/console">Exphost</Link>
+    <Link className='navbar-brand' to="/">Exphost</Link>
     <Navbar.Toggle aria-controls="navbarScroll" />
     <Navbar.Collapse id="navbarScroll">
       <Nav
@@ -17,7 +17,7 @@ function TopNav (props) {
         style={{ maxHeight: '100px' }}
         navbarScroll
       >
-        <Link className='nav-link' to="../..">Home</Link>
+        <a href="/">Home</a>
       </Nav>
       <div>
         { props.user != null
