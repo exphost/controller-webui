@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Nav, Dropdown } from 'react-bootstrap'
+import { Nav, Navbar, Dropdown } from 'react-bootstrap'
 import './sidemenu.css'
 
 function SideMenu (props) {
@@ -16,29 +16,36 @@ function SideMenu (props) {
   )
 
   return (
-    <Nav className="col-md-12 d-none d-md-block bg-light sidebar pt-1">
-      <Nav.Item>
-      <Dropdown className="mx-2 my-2" onSelect={props.setOrg}>
-        <Dropdown.Toggle id="dropdown-autoclose-true">
-          {props.currentOrg}
-        </Dropdown.Toggle>
-        <Dropdown.Menu>
-          {orgs}
-        </Dropdown.Menu>
-      </Dropdown>
-      </Nav.Item>
-      <hr/>
-      <Nav.Item>
-        <Nav.Link as={Link} to="/orgs">Orgs</Nav.Link>
-      </Nav.Item>
-      <hr/>
-      <Nav.Item>
-        <Nav.Link as={Link} to="/apps/nginx">Nginx</Nav.Link>
-      </Nav.Item>
-      <Nav.Item>
-        <Nav.Link as={Link} to="/apps/wordpress">Wordpress</Nav.Link>
-      </Nav.Item>
-    </Nav>
+    <React.Fragment>
+      <Navbar expand="sm" collapseOnSelect>
+      <Navbar.Toggle aria-controls="sidemenu" />
+      <Navbar.Collapse id="sidemenu">
+        <Nav className="col-md-12 d-block bg-light sidebar pt-1">
+          <Nav.Item>
+          <Dropdown className="mx-2 my-2" onSelect={props.setOrg}>
+            <Dropdown.Toggle id="dropdown-autoclose-true">
+              {props.currentOrg}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {orgs}
+            </Dropdown.Menu>
+          </Dropdown>
+          </Nav.Item>
+          <hr/>
+          <Nav.Item>
+            <Nav.Link as={Link} to="/orgs" eventKey="orgs">Orgs</Nav.Link>
+          </Nav.Item>
+          <hr/>
+          <Nav.Item>
+            <Nav.Link as={Link} to="/apps/nginx" eventKey="nginx">Nginx</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
+            <Nav.Link as={Link} to="/apps/wordpress" eventKey="wordpress">Wordpress</Nav.Link>
+          </Nav.Item>
+        </Nav>
+      </Navbar.Collapse>
+      </Navbar>
+    </React.Fragment>
   )
 }
 
