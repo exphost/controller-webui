@@ -1,4 +1,4 @@
-import { useCookies } from 'react-cookie'
+import React, { useEffect } from 'react'
 
 export function LogoutPage () {
   localStorage.removeItem('oauth2_state')
