@@ -92,8 +92,7 @@ function AppNginxList (props) {
   }
 
   useEffect(() => {
-    const debug = false
-    if (debug) {
+    if (process.env.REACT_APP_TESTING) {
       loadAppsMock()
     } else {
       loadApps()
