@@ -3,10 +3,10 @@ import { useCookies } from 'react-cookie'
 
 export function LogoutPage () {
   const [cookies, setCookie, removeCookie] = useCookies()
-  const gupiEslist = cookies
-  const bardzoGupiEslist = setCookie()
+  setCookie('accessToken', '', { path: '/' })
   removeCookie('accessToken', { path: '/' })
   removeCookie('refresh_token', { path: '/' })
+  console.log(cookies)
   return (
     <div>
       <h1>Logged out</h1>
