@@ -3,8 +3,8 @@ import { useCookies } from 'react-cookie'
 
 export function LogoutPage () {
   const [cookies, setCookie, removeCookie] = useCookies()
-  gupi_eslist = cookies
-  bardzo_gupi_eslist = setCookie()
+  const gupiEslist = cookies
+  const bardzoGupiEslist = setCookie()
   removeCookie('accessToken', { path: '/' })
   removeCookie('refresh_token', { path: '/' })
   return (
