@@ -63,8 +63,7 @@ const ConsolePage = () => {
   }
 
   useEffect(() => {
-    const debug = false
-    if (debug) {
+    if (process.env.REACT_APP_TESTING) {
       getUserinfoMock()
       return
     }
