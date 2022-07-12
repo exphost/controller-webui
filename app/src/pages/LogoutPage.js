@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 export function LogoutPage () {
   localStorage.removeItem('oauth2_state')
@@ -12,4 +12,3 @@ export function LogoutPage () {
     </div>
   )
 }
-
