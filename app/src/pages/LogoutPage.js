@@ -7,7 +7,7 @@ export function LogoutPage () {
   localStorage.removeItem('AUTH_SECRET')
   return (
     <h1>Logged out</h1>
-    <a href="https://www.exphost.pl/console">Login again</a>
+    <p><a href="https://www.exphost.pl/console">Login again</a></p>
   )
 }
 
