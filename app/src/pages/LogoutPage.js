@@ -2,7 +2,7 @@ import React from 'react'
 import { useCookies } from 'react-cookie'
 
 export function LogoutPage () {
-  const [removeCookie] = useCookies()
+  const [cookies, setCookie, removeCookie] = useCookies()
   removeCookie('accessToken', { path: '/' })
   removeCookie('refresh_token', { path: '/' })
   return (
