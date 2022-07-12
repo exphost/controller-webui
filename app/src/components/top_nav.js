@@ -17,7 +17,7 @@ function TopNav (props) {
         style={{ maxHeight: '100px' }}
         navbarScroll
       >
-        <Link className='nav-link' to="../">Home</Link>
+        <Link className='nav-link' to="../..">Home</Link>
       </Nav>
       <div>
         { props.user != null
