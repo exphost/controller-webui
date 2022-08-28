@@ -37,6 +37,9 @@ function SideMenu (props) {
           </Nav.Item>
           <hr/>
           <Nav.Item>
+            <Nav.Link as={Link} to="/apps/domain">Domain</Nav.Link>
+          </Nav.Item>
+          <Nav.Item>
             <Nav.Link as={Link} to="/apps/nginx" eventKey="nginx">Nginx</Nav.Link>
           </Nav.Item>
           <Nav.Item>

@@ -28,7 +28,6 @@ buildapp:
       podman --root podman build 
       --pull
       -f Dockerfile-dev
-      --cache-from ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       --tag ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
       .
     - podman --root podman push ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev
@@ -67,7 +66,6 @@ build:
       --pull
       --build-arg APPVER=${CI_COMMIT_SHORT_SHA}-dev
       --build-arg APPIMAGE=${CI_REGISTRY_IMAGE}
-      --cache-from $CI_REGISTRY_IMAGE:latest
       --tag $CI_REGISTRY_IMAGE:dev
       .
 

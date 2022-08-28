@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Row, Col } from 'react-bootstrap'
 import Console from '../components/console'
 import AppNginx from '../components/apps/appNginx'
+import AppDomain from '../components/apps/appDomain'
 import axios from 'axios'
 import RegisterPage from './Register'
 import TopNav from '../components/top_nav'
@@ -95,6 +96,7 @@ const ConsolePage = () => {
       <Routes>
         <Route>
           <Route index element={<Console/>}/>
+          <Route path='apps/domain' element={<AppDomain org={org}/> }/>
           <Route path='apps/nginx' element={<AppNginx org={org}/> }/>
           <Route path='*' element={<Navigate to='/'/>}/>
           <Route path="register" element={<RegisterPage/> }/> {/* needed for tests :| */}
