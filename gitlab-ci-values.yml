@@ -6,6 +6,8 @@ usersservice:
     dn: "cn=admin,dc=example,dc=com"
     password:
       password: pass123
+  endpoints:
+    apigateway: http://test-controller-gateway:5000/graphql
 webui:
   enabled: false
 #  image:
@@ -18,6 +20,7 @@ gateway:
     usersservice: "http://test-controller-usersservice:5000/users/"
     appsservice: "http://test-controller-appsservice:5000/"
     domainsservice: "http://test-controller-domainsservice:5000/"
+    emailsservice: "http://test-controller-usersservice:5000/"
 
 landingpage:
   ingress:

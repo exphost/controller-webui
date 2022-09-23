@@ -4,6 +4,7 @@ import { Row, Col } from 'react-bootstrap'
 import Console from '../components/console'
 import AppNginx from '../components/apps/appNginx'
 import AppDomain from '../components/apps/appDomain'
+import AppEmail from '../components/apps/appEmail'
 import axios from 'axios'
 import RegisterPage from './Register'
 import TopNav from '../components/top_nav'
@@ -97,6 +98,7 @@ const ConsolePage = () => {
         <Route>
           <Route index element={<Console/>}/>
           <Route path='apps/domain' element={<AppDomain org={org}/> }/>
+          <Route path='apps/emails' element={<AppEmail org={org}/> }/>
           <Route path='apps/nginx' element={<AppNginx org={org}/> }/>
           <Route path='*' element={<Navigate to='/'/>}/>
           <Route path="register" element={<RegisterPage/> }/> {/* needed for tests :| */}
