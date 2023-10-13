@@ -10,64 +10,54 @@ function AppNginxAdd (props) {
     event.preventDefault()
     const fields = [['name', 'name']]
     for (let i = 0; i < fields.length; i++) {
-      console.log(input[fields[i][0]])
       if (input[fields[i][0]] == null || input[fields[i][0]] === '') {
         // alert("Field "+fields[i][1]+" cannot be empty");
         setMessage('no field ' + fields[i][1])
         return 2
       }
     }
-    let values = `name: "${input.name}",
-              org: "${props.org}"`
+    const values = {
+      org: props.org,
+      app: 'todo',
+      name: input.name
+    }
     if (input.gitrepo) {
-      let valuesGit = `repo: "${input.gitrepo}"`
+      values.config.git.repo = input.gitrepo
       if (input.gitbranch) {
-        valuesGit += `,branch: "${input.gitbranch}"`
+        values.config.git.branch = input.gitbranch
       }
-      values += `,git: {${valuesGit}}`
     }
     if (input.fqdn) {
-      values += `,fqdns: ["${input.fqdn}"]`
+      values.config.fqdns = [input.fqdn]
     }
-    const query = JSON.stringify({
-      query: `mutation {
-                    appNginxCreate(${values})
-                        {
-                            nginx {
-                                name,
-                                org,
-                                fqdns,
-                            },
-                            error
-                        }
-                    }`
-    })
     const requestOptions = {
-      url: window.API_URL + '/graphql',
+      url: window.API_URL + '/api/apps/v1/nginx/',
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: query,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      },
+      data: values,
       responseType: 'json'
     }
     axios
       .request(requestOptions)
       .then(function (response) {
-        const res = response.data // Response received from the API
-        if (res.data.appNginxCreate.error &&
-                   res.data.appNginxCreate.error.includes('already exists')) {
-          setMessage('error 1: already exists')
-          return 1
-        }
-        if (res.data.appNginxCreate.error) {
-          setMessage('error 2: submit failed')
-          return 2
-        }
         setMessage('added')
         return 0
       })
       .catch(function (err) {
+        if (err.response) {
+          if (err.response.status === 409) {
+            setMessage('error 1: already exists')
+            return 1
+          }
+          setMessage('error 2: submit failed')
+          return 2
+        }
         console.log(err)
         setMessage('error 3: submit error')
+        return 3
         // alert("Submit failed")
       })
     setMessage('adding...')

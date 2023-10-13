@@ -41,31 +41,19 @@ function AppEmailList (props) {
     makeTable(emails)
   }
   function loadEmails () {
-    const query = JSON.stringify({
-      query: `{
-                email(org: "${props.org}") {
-                  emails {
-                    mail,
-                    cn,
-                    sn,
-                    aliases
-                  },
-                  error
-                }
-              }`
-    })
     const requestOptions = {
-      url: window.API_URL + '/graphql',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: query,
+      url: window.API_URL + '/api/users/v1/emails/?org=' + props.org,
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      },
       responseType: 'json'
     }
     axios
       .request(requestOptions)
       .then(function (response) {
-        const res = response.data // Response received from the API
-        makeTable(res.data.email.emails)
+        makeTable(response.data.emails)
         return 0
       })
       .catch(function (err) {

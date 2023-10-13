@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useCookies } from 'react-cookie'
 
 export function LoginPageRedirect () {
   const state = Math.random().toString(32).substr(2)
@@ -17,12 +16,6 @@ export function LoginPageRedirect () {
 
 export function LoginPageCallback () {
   const params = new URLSearchParams(window.location.search)
-  const [cookies, setCookie] = useCookies()
-  // if(cookies.get("state") != params.get('state')) {
-  //  return (
-  //    <h1> Wrong state </h1>
-  //  )
-  // }
   const requestOptions = {
     method: 'POST',
     headers: {
@@ -37,15 +30,8 @@ export function LoginPageCallback () {
   fetch(localStorage.getItem('AUTH_URL') + '/token', requestOptions)
     .then(response => response.json())
     .then(function (data) {
-      setCookie('accessToken', data.access_token, {
-        path: '/',
-        secure: true
-      })
-      setCookie('refresh_token', data.refresh_token, {
-        path: '/',
-        secure: true
-      })
-      console.log(cookies)
+      localStorage.setItem('access_token', data.access_token)
+      localStorage.setItem('refresh_token', data.refresh_token)
       localStorage.removeItem('oauth2_state')
       localStorage.removeItem('AUTH_URL')
       localStorage.removeItem('AUTH_CLIENT_ID')

@@ -13,14 +13,14 @@ function AppNginxList (props) {
         <td>{ app.name }</td>
         <td>{ app.org }</td>
         <td>
-          { app.fqdns
+          { app.config?.fqdns
             ? <ul>
-                { app.fqdns.map((fqdn, index) => <li key={index}> <a href={'https://' + fqdn} target="_blank" rel="noopener noreferrer">{ fqdn }</a></li>)}
+                { app.config.fqdns.map((fqdn, index) => <li key={index}> <a href={'https://' + fqdn} target="_blank" rel="noopener noreferrer">{ fqdn }</a></li>)}
               </ul>
             : '' }
         </td>
         <td>
-          { app.git ? app.git.repo + ' / ' + app.git.branch : '' }
+          { app.config?.git ? app.config.git.repo + ' / ' + app.config.git.branch : '' }
         </td>
       </tr>
     )))
@@ -28,61 +28,46 @@ function AppNginxList (props) {
   function loadAppsMock () {
     const apps = [
       {
-        name: 'app1',
+        name: 'nginx1',
         org: 'org1',
-        fqdns: ['fqdn1'],
-        git: {
-          repo: 'repo1',
-          branch: 'branch1'
+        app: 'app1',
+        config: {
+          fqdns: ['fqdn1'],
+          git: {
+            repo: 'repo1',
+            branch: 'branch1'
+          }
         }
       },
       {
-        name: 'app2',
+        name: 'nginx2',
         org: 'org1',
-        fqdns: ['fqdn2'],
-        git: {
-          repo: 'repo2',
-          branch: 'branch1'
-        }
-      },
-      {
-        name: 'app3',
-        org: 'org1',
-        fqdns: ['fqdn3'],
-        git: {
-          repo: 'repo3',
-          branch: 'branch1'
+        app: 'app2',
+        config: {
+          fqdns: ['fqdn2'],
+          git: {
+            repo: 'repo2'
+          }
         }
       }
     ]
     makeTable(apps)
   }
   function loadApps () {
-    const query = JSON.stringify({
-      query: ` {
-                        nginx(org: "${props.org}") {
-                                    name,
-                                    org,
-                                    fqdns,
-                                    git {
-                                        repo,
-                                        branch
-                                    }
-                                },
-                        }`
-    })
     const requestOptions = {
-      url: window.API_URL + '/graphql',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: query,
+      url: window.API_URL + '/api/apps/v1/nginx/?org=' + props.org + '&app=app1',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      },
       responseType: 'json'
     }
     axios
       .request(requestOptions)
       .then(function (response) {
         const res = response.data // Response received from the API
-        makeTable(res.data.nginx)
+        makeTable(res.nginx)
         return 0
       })
       .catch(function (err) {

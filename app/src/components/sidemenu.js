@@ -12,8 +12,16 @@ function SideMenu (props) {
     } else {
       return <Dropdown.Item key={org} eventKey={org}>{org}</Dropdown.Item>
     }
-  }
-  )
+  })
+
+  const app = props.apps.map(app => {
+    const isActive = app === props.currentApp
+    if (isActive) {
+      return <Dropdown.Item key={app} eventKey={app} active>{app}</Dropdown.Item>
+    } else {
+      return <Dropdown.Item key={app} eventKey={app}>{app}</Dropdown.Item>
+    }
+  })
 
   return (
     <React.Fragment>
@@ -28,6 +36,16 @@ function SideMenu (props) {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {orgs}
+            </Dropdown.Menu>
+          </Dropdown>
+          </Nav.Item>
+          <Nav.Item>
+          <Dropdown className="mx-2 my-2" onSelect={props.setApp}>
+            <Dropdown.Toggle id="dropdown-autoclose-true">
+              {props.currentApp}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {app}
             </Dropdown.Menu>
           </Dropdown>
           </Nav.Item>
@@ -58,7 +76,10 @@ function SideMenu (props) {
 SideMenu.propTypes = {
   orgs: PropTypes.arrayOf(PropTypes.string).isRequired,
   currentOrg: PropTypes.string.isRequired,
-  setOrg: PropTypes.func.isRequired
+  setOrg: PropTypes.func.isRequired,
+  apps: PropTypes.arrayOf(PropTypes.string).isRequired,
+  setApp: PropTypes.func.isRequired,
+  currentApp: PropTypes.string.isRequired
 }
 
 export default SideMenu

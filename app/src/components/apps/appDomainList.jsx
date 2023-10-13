@@ -29,29 +29,22 @@ function AppDomainList (props) {
     makeTable(apps)
   }
   function loadApps () {
-    const query = JSON.stringify({
-      query: `{
-                domain(org: "${props.org}") {
-                  domains {
-                    name,
-                    org,
-                  },
-                  error
-                }
-              }`
-    })
     const requestOptions = {
-      url: window.API_URL + '/graphql',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: query,
+      url: window.API_URL + '/api/domains/v1/domains',
+      params: {
+        org: props.org
+      },
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + window.localStorage.getItem('access_token')
+      },
       responseType: 'json'
     }
     axios
       .request(requestOptions)
       .then(function (response) {
-        const res = response.data // Response received from the API
-        makeTable(res.data.domain.domains)
+        makeTable(response.data)
         return 0
       })
       .catch(function (err) {

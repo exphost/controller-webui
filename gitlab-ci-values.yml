@@ -80,3 +80,7 @@ initialDB:
   serviceaccounts:
   - name: dex
     password: dex123
+
+authservice:
+  authEndpoint: "https://auth.__DOMAIN__/dex"
+  authAudience: "exphost-controller"

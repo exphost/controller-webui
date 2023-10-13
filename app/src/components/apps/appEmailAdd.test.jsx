@@ -3,6 +3,25 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import AppEmailAdd from './appEmailAdd'
 import nock from 'nock'
 
+beforeEach(() => {
+  nock.cleanAll()
+  nock('http://localhost:8080')
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-headers': 'Authorization'
+    })
+    .persist()
+    .intercept('/api/users/v1/emails/', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .post('/api/users/v1/emails/')
+    .query(true)
+    .reply(201, {
+      password: 'pass123'
+    })
+})
+
 test('show apps in console page', () => {
   render(<AppEmailAdd org="test-org"/>)
   expect(screen.queryByText(/Email:/)).toBeInTheDocument()
@@ -12,13 +31,19 @@ test('show apps in console page', () => {
 
 test('submit email app wrong response', async () => {
   window.API_URL = 'http://localhost:8080'
+  nock.cleanAll()
   nock('http://localhost:8080')
-    .post('/graphql')
-    .reply(400, {
-    }, {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json'
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-headers': 'Authorization'
     })
+    .persist()
+    .intercept('/api/users/v1/emails/', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .post('/api/users/v1/emails/')
+    .reply(400)
   render(<AppEmailAdd org="test-org"/>)
   fireEvent.change(screen.getByTestId('email-add-mail'), { target: { value: 'test-aa' } })
   fireEvent.change(screen.getByTestId('email-add-cn'), { target: { value: 'test-aa' } })
@@ -29,24 +54,6 @@ test('submit email app wrong response', async () => {
 
 test('submit email', async () => {
   window.API_URL = 'http://localhost:8080'
-  nock('http://localhost:8080')
-    .post('/graphql')
-    .reply(200, {
-      data: {
-        emailCreate: {
-          email: {
-            mail: 'aa@aa.com',
-            cn: 'John',
-            sn: 'Brown',
-            password: 'pass123'
-          },
-          error: ''
-        }
-      }
-    }, {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json'
-    })
   render(<AppEmailAdd org="qwe"/>)
   expect(screen.getByTestId('email-add-org')).toHaveDisplayValue('qwe')
   fireEvent.change(screen.getByTestId('email-add-mail'), { target: { value: 'test-aa' } })

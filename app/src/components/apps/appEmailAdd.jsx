@@ -10,58 +10,46 @@ function AppEmailAdd (props) {
     event.preventDefault()
     const fields = [['mail', 'Mail'], ['cn', 'Name'], ['sn', 'Surname']]
     for (let i = 0; i < fields.length; i++) {
-      console.log(input[fields[i][0]])
       if (input[fields[i][0]] == null || input[fields[i][0]] === '') {
         // alert("Field "+fields[i][1]+" cannot be empty");
         setMessage('no field ' + fields[i][1])
         return 2
       }
     }
-    const values = `mail: "${input.mail}",
-              org: "${props.org}",
-              cn: "${input.cn}",
-              sn: "${input.sn}"`
-    const query = JSON.stringify({
-      query: `mutation {
-                    emailCreate(${values})
-                        {
-                            email {
-                                mail,
-                                sn,
-                                cn,
-                                aliases,
-                                password
-                            },
-                            error
-                        }
-                    }`
-    })
+    const values = {
+      mail: input.mail,
+      cn: input.cn,
+      sn: input.sn
+    }
     const requestOptions = {
-      url: window.API_URL + '/graphql',
+      url: window.API_URL + '/api/users/v1/emails/?org=' + props.org,
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: query,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      },
+      data: values,
       responseType: 'json'
     }
     axios
       .request(requestOptions)
       .then(function (response) {
-        const res = response.data // Response received from the API
-        if (res.data.emailCreate.error &&
-                   res.data.emailCreate.error.includes('already exists')) {
-          setMessage('error 1: already exists')
-          return 1
-        }
-        if (res.data.emailCreate.error) {
-          setMessage('error 2: submit failed')
-          return 2
-        }
-        setMessage('added. password: ' + res.data.emailCreate.email.password)
+        setMessage('added ' + response.data.password)
         return 0
       })
       .catch(function (err) {
+        if (err.response) {
+          if (err.response.status === 409) {
+            setMessage('error 1: duplicate')
+            return 1
+            // alert("Duplicate entry")
+          }
+          setMessage('error 2: submit failed')
+          return 2
+        }
         console.log(err)
         setMessage('error 3: submit error')
+        return 3
         // alert("Submit failed")
       })
     setMessage('adding...')

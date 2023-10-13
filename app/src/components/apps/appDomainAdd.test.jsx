@@ -3,6 +3,23 @@ import { render, screen, waitFor, fireEvent } from '@testing-library/react'
 import AppDomainAdd from './appDomainAdd'
 import nock from 'nock'
 
+beforeEach(() => {
+  nock.cleanAll()
+  nock('http://localhost:8080')
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-headers': 'Authorization'
+    })
+    .persist()
+    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .post('/api/domains/v1/domains')
+    .query(true)
+    .reply(201)
+})
+
 test('show apps in console page', () => {
   render(<AppDomainAdd org="test-org"/>)
   expect(screen.queryByText(/name/i)).toBeInTheDocument()
@@ -10,33 +27,27 @@ test('show apps in console page', () => {
 
 test('submit domain app wrong response', async () => {
   window.API_URL = 'http://localhost:8080'
+  nock.cleanAll()
   nock('http://localhost:8080')
-    .post('/graphql')
-    .reply(400, {
-    }, {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json'
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-headers': 'Authorization'
     })
+    .persist()
+    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .post('/api/domains/v1/domains')
+    .reply(400)
   render(<AppDomainAdd org="test-org"/>)
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))
-  await waitFor(() => expect(screen.getByTestId('domain-add-message')).toHaveTextContent('submit error'))
+  await waitFor(() => expect(screen.getByTestId('domain-add-message')).toHaveTextContent('submit failed'))
 })
 
 test('submit domain', async () => {
   window.API_URL = 'http://localhost:8080'
-  nock('http://localhost:8080')
-    .post('/graphql')
-    .reply(200, {
-      data: {
-        domainRegister: {
-          error: ''
-        }
-      }
-    }, {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json'
-    })
   render(<AppDomainAdd org="qwe"/>)
   expect(screen.getByTestId('domain-add-org')).toHaveDisplayValue('qwe')
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
@@ -46,18 +57,20 @@ test('submit domain', async () => {
 
 test('submit app duplicate', async () => {
   window.API_URL = 'http://localhost:8080'
+  nock.cleanAll()
   nock('http://localhost:8080')
-    .post('/graphql')
-    .reply(200, {
-      data: {
-        domainRegister: {
-          error: 'App already exists'
-        }
-      }
-    }, {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json'
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-headers': 'Authorization'
     })
+    .persist()
+    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .post('/api/domains/v1/domains')
+    .query(true)
+    .reply(409)
   render(<AppDomainAdd org="test-org"/>)
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))

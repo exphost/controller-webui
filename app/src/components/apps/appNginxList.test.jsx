@@ -3,34 +3,48 @@ import { render, screen, waitFor } from '@testing-library/react'
 import AppNginxList from './appNginxList'
 import nock from 'nock'
 
-test('list nginx apps', async () => {
+beforeEach(() => {
   nock('http://localhost:8080')
-    .post('/graphql')
+    .defaultReplyHeaders({
+      'access-control-allow-origin': '*',
+      'access-control-allow-credentials': 'true',
+      'access-control-allow-headers': 'Authorization'
+    })
+    .persist()
+    .intercept('/api/apps/v1/nginx/', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .get('/api/apps/v1/nginx/')
+    .query(true)
     .reply(200, {
-      data: {
-        nginx: [
-          {
-            name: 'example-app1',
-            org: 'test-org',
-            git: null,
-            fqdns: null
-          },
-          {
-            name: 'example-app2',
-            org: 'test-org',
+      nginx: [
+        {
+          name: 'example-app1',
+          org: 'test-org',
+          app: 'app1'
+        },
+        {
+          name: 'example-app2',
+          org: 'test-org',
+          app: 'app2',
+          config: {
             fqdns: ['www.test.pl', 'www.example.com'],
             git: {
               repo: 'https://github.com/test/test.git',
               branch: 'devel'
             }
           }
-        ]
-
-      }
-    }, {
-      'Access-Control-Allow-Origin': '*',
-      'Content-type': 'application/json'
+        }
+      ]
     })
+    .get('/api/domains/v1/domains')
+    .query(true)
+    .reply(200, [
+      'example.com'
+    ])
+})
+
+test('list nginx apps', async () => {
   window.API_URL = 'http://localhost:8080'
   render(<AppNginxList org='test-org'/>)
   await waitFor(() => expect(screen.getByText('example-app1')).toBeInTheDocument)

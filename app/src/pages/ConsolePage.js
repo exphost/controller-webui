@@ -11,8 +11,10 @@ import TopNav from '../components/top_nav'
 import SideMenu from '../components/sidemenu'
 
 const ConsolePage = () => {
-  const [user, setUser] = useState({ login: 'initial', groups: [] })
+  const [user, setUser] = useState({ username: 'initial', groups: [] })
   const [org, setOrg] = useState('ini')
+  const [app, setApp] = useState('ini')
+  const [apps, setApps] = useState(['none'])
   const navigate = useNavigate()
 
   function getUserinfoMock () {
@@ -20,30 +22,22 @@ const ConsolePage = () => {
       sn: 'test-sn',
       gn: 'test-gn',
       mail: 'test-mail@mail.ru',
-      login: 'test-login',
+      username: 'test-login',
       groups: ['test-group1', 'test-group2']
     })
   }
-  function getUserinfo () {
-    const query = JSON.stringify({
-      query: `{
-                user {
-                      user {
-                        sn
-                        gn
-                        mail
-                        login
-                        groups
-                        }
-                      error
-                    }
-                  }`
-    })
+
+  function getApps (org) {
     const requestOptions = {
-      url: window.API_URL + '/graphql',
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      data: query,
+      url: window.API_URL + '/api/apps/v1/app/',
+      params: {
+        org
+      },
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      },
       responseType: 'json',
       withCredentials: true
     }
@@ -51,10 +45,31 @@ const ConsolePage = () => {
       .request(requestOptions)
       .then(function (response) {
         const res = response.data // Response received from the API
-        if (res.data.user.error) {
-          setUser(null)
-        }
-        setUser(res.data.user.user)
+        setApps(res)
+      })
+      .catch(function (err) {
+        console.log(err)
+        setApps(['none'])
+        // alert("Submit failed")
+      })
+  }
+
+  function getUserinfo () {
+    const requestOptions = {
+      url: window.API_URL + '/api/users/v1/users/userinfo',
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('access_token')
+      },
+      responseType: 'json',
+      withCredentials: true
+    }
+    axios
+      .request(requestOptions)
+      .then(function (response) {
+        const res = response.data // Response received from the API
+        setUser(res)
         return 0
       })
       .catch(function (err) {
@@ -77,11 +92,19 @@ const ConsolePage = () => {
       navigate('register')
       return
     }
-    if (user.login === 'initial') {
+    if (user.username === 'initial') {
       return
     }
     setOrg(user.groups[0])
   }, [user])
+
+  useEffect(() => {
+    getApps(org)
+  }, [org])
+
+  useEffect(() => {
+    setApp(apps[0])
+  }, [apps])
 
   return (
     <React.Fragment>
@@ -89,7 +112,7 @@ const ConsolePage = () => {
     <Row>
       <Col sm={3} lg={2} className='sidemenu'>
         { org !== 'ini'
-          ? <SideMenu currentOrg={org} orgs={user.groups} setOrg={setOrg}/>
+          ? <SideMenu currentOrg={org} orgs={user.groups} setOrg={setOrg} currentApp={app} setApp={setApp} apps={apps}/>
           : null
         }
       </Col>

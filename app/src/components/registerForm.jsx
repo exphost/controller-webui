@@ -24,27 +24,16 @@ function RegisterForm () {
       alert("Passwords didn't match")
       return 1
     }
-    const query = JSON.stringify({
-      query: `mutation {
-                    userRegister(login: "${input.login}",
-                                 mail: "${input.mail}",
-                                 sn: "${input.sn}",
-                                 gn: "${input.gn}",
-                                 password: "${input.password}"
-                                )
-                        {
-                            user {
-                                gn,
-                                sn,
-                                mail,
-                                login
-                            },
-                            error
-                        }
-                    }`
-    })
+    // const query = JSON.stringify(`{
+    const query = {
+      login: input.login,
+      mail: input.mail,
+      sn: input.sn,
+      gn: input.gn,
+      password: input.password
+    }
     const requestOptions = {
-      url: window.API_URL + '/graphql',
+      url: window.API_URL + '/api/users/v1/users/users/',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       data: query,
