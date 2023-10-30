@@ -48,7 +48,7 @@ const ConsolePage = () => {
         setApps(res)
       })
       .catch(function (err) {
-        console.log(err)
+        console.log('getApps error', err.response)
         setApps(['none'])
         // alert("Submit failed")
       })
@@ -73,7 +73,7 @@ const ConsolePage = () => {
         return 0
       })
       .catch(function (err) {
-        console.log(err)
+        console.log('getUserinfo error', err.response)
         setUser(null)
         // alert("Submit failed")
       })

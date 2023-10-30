@@ -71,7 +71,7 @@ function AppNginxList (props) {
         return 0
       })
       .catch(function (err) {
-        console.log(err)
+        console.log('submit failed', err.response)
         // alert("Submit failed")
       })
   }

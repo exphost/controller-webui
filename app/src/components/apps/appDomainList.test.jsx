@@ -1,9 +1,10 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import AppDomainList from './appDomainList'
 import nock from 'nock'
 
 beforeEach(() => {
+  nock.cleanAll()
   nock('http://localhost:8080')
     .defaultReplyHeaders({
       'access-control-allow-origin': '*',
@@ -14,6 +15,7 @@ beforeEach(() => {
     .intercept('/api/domains/v1/domains', 'OPTIONS')
     .query(true)
     .reply(200, null)
+    .persist()
     .get('/api/domains/v1/domains')
     .query(true)
     .reply(200, [
@@ -30,7 +32,9 @@ beforeEach(() => {
 
 test('list domains', async () => {
   window.API_URL = 'http://localhost:8080'
-  render(<AppDomainList org='test-org'/>)
+  act(() => {
+    render(<AppDomainList org='test-org'/>)
+  })
   await waitFor(() => expect(screen.getByText('example.com')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('example2.com')).toBeInTheDocument)
 })

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { render, screen, waitFor, fireEvent, act } from '@testing-library/react'
 import AppDomainAdd from './appDomainAdd'
 import nock from 'nock'
 
@@ -15,13 +15,16 @@ beforeEach(() => {
     .intercept('/api/domains/v1/domains', 'OPTIONS')
     .query(true)
     .reply(200, null)
+    .persist()
     .post('/api/domains/v1/domains')
     .query(true)
     .reply(201)
 })
 
 test('show apps in console page', () => {
-  render(<AppDomainAdd org="test-org"/>)
+  act(() => {
+    render(<AppDomainAdd org="test-org"/>)
+  })
   expect(screen.queryByText(/name/i)).toBeInTheDocument()
 })
 
@@ -40,7 +43,9 @@ test('submit domain app wrong response', async () => {
     .reply(200, null)
     .post('/api/domains/v1/domains')
     .reply(400)
-  render(<AppDomainAdd org="test-org"/>)
+  act(() => {
+    render(<AppDomainAdd org="test-org"/>)
+  })
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))
   await waitFor(() => expect(screen.getByTestId('domain-add-message')).toHaveTextContent('submit failed'))
@@ -48,7 +53,9 @@ test('submit domain app wrong response', async () => {
 
 test('submit domain', async () => {
   window.API_URL = 'http://localhost:8080'
-  render(<AppDomainAdd org="qwe"/>)
+  act(() => {
+    render(<AppDomainAdd org="qwe"/>)
+  })
   expect(screen.getByTestId('domain-add-org')).toHaveDisplayValue('qwe')
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))
@@ -71,14 +78,18 @@ test('submit app duplicate', async () => {
     .post('/api/domains/v1/domains')
     .query(true)
     .reply(409)
-  render(<AppDomainAdd org="test-org"/>)
+  act(() => {
+    render(<AppDomainAdd org="test-org"/>)
+  })
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))
   await waitFor(() => expect(screen.getByTestId('domain-add-message')).toHaveTextContent('already exists'))
 })
 
 test('submit domain no name', async () => {
-  render(<AppDomainAdd org="test-org"/>)
+  act(() => {
+    render(<AppDomainAdd org="test-org"/>)
+  })
   fireEvent.click(screen.getByText('Create'))
   await waitFor(() => expect(screen.getByTestId('domain-add-message')).toHaveTextContent('no field name'))
 })

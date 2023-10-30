@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import AppNginxList from './appNginxList'
 import nock from 'nock'
 
@@ -14,6 +14,11 @@ beforeEach(() => {
     .intercept('/api/apps/v1/nginx/', 'OPTIONS')
     .query(true)
     .reply(200, null)
+    .persist()
+    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .persist()
     .get('/api/apps/v1/nginx/')
     .query(true)
     .reply(200, {
@@ -37,6 +42,7 @@ beforeEach(() => {
         }
       ]
     })
+    .persist()
     .get('/api/domains/v1/domains')
     .query(true)
     .reply(200, [
@@ -46,7 +52,9 @@ beforeEach(() => {
 
 test('list nginx apps', async () => {
   window.API_URL = 'http://localhost:8080'
-  render(<AppNginxList org='test-org'/>)
+  act(() => {
+    render(<AppNginxList org='test-org'/>)
+  })
   await waitFor(() => expect(screen.getByText('example-app1')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('example-app2')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('www.test.pl')).toBeInTheDocument)

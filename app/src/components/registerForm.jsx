@@ -46,7 +46,7 @@ function RegisterForm () {
         alert('Submit successfuly')
       })
       .catch(function (error) {
-        console.log(error)
+        console.log('Submit failed', error.response)
         alert('Submit failed')
       })
   }
