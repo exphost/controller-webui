@@ -46,6 +46,8 @@ function SideMenu (props) {
             </Dropdown.Toggle>
             <Dropdown.Menu>
               {app}
+              <Dropdown.Divider />
+              <Dropdown.Item as={Link} to="/apps/app" eventKey="apps">create app</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
           </Nav.Item>

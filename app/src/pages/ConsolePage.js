@@ -5,6 +5,7 @@ import Console from '../components/console'
 import AppNginx from '../components/apps/appNginx'
 import AppDomain from '../components/apps/appDomain'
 import AppEmail from '../components/apps/appEmail'
+import AppApp from '../components/apps/appApp'
 import axios from 'axios'
 import RegisterPage from './Register'
 import TopNav from '../components/top_nav'
@@ -103,6 +104,10 @@ const ConsolePage = () => {
   }, [org])
 
   useEffect(() => {
+    if (apps.length === 0) {
+      navigate('apps/app')
+      return
+    }
     setApp(apps[0])
   }, [apps])
 
@@ -123,6 +128,7 @@ const ConsolePage = () => {
           <Route path='apps/domain' element={<AppDomain org={org}/> }/>
           <Route path='apps/emails' element={<AppEmail org={org}/> }/>
           <Route path='apps/nginx' element={<AppNginx org={org}/> }/>
+          <Route path='apps/app' element={<AppApp org={org}/> }/>
           <Route path='*' element={<Navigate to='/'/>}/>
           <Route path="register" element={<RegisterPage/> }/> {/* needed for tests :| */}
         </Route>

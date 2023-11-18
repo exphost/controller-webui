@@ -132,4 +132,46 @@ describe('ConsolePage', () => {
     })
     await waitFor(() => expect(screen.getByTestId('domain-add-org')).toHaveDisplayValue('test-pr'))
   })
+
+  test('show app creation page when no apps defined', async () => {
+    window.API_URL = 'http://localhost:8080'
+    nock.cleanAll()
+    nock('http://localhost:8080')
+      .defaultReplyHeaders({
+        'access-control-allow-origin': '*',
+        'access-control-allow-credentials': 'true',
+        'access-control-allow-headers': 'Authorization'
+      })
+      .persist()
+      .intercept('/api/users/v1/users/userinfo', 'OPTIONS')
+      .reply(200, null)
+      .get('/api/users/v1/users/userinfo')
+      .reply(200, {
+        sn: 'John',
+        gn: 'test',
+        mail: 'test-pr@mail.ru',
+        username: 'test-pr',
+        groups: [
+          'test-pr'
+        ]
+      })
+      .persist()
+      .intercept('/api/apps/v1/app/', 'OPTIONS')
+      .query(true)
+      .reply(200, null)
+      .persist()
+      .get('/api/apps/v1/app/')
+      .query(true)
+      .reply(200, [
+      ])
+    act(() => {
+      render(
+        <MemoryRouter path="/console">
+            <ConsolePage/>
+          </MemoryRouter>
+      )
+    })
+    await waitFor(() => expect(screen.getByText(/Create application/)).toBeInTheDocument())
+    await waitFor(() => expect(screen.getByTestId('app-add-submit')).toBeInTheDocument())
+  })
 })
