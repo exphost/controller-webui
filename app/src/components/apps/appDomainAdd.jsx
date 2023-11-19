@@ -21,7 +21,7 @@ function AppDomainAdd (props) {
       org: props.org
     }
     const requestOptions = {
-      url: window.API_URL + '/api/domains/v1/domains',
+      url: window.API_URL + '/api/domains/v1/domains/',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

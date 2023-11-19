@@ -12,11 +12,11 @@ beforeEach(() => {
       'access-control-allow-headers': 'Authorization'
     })
     .persist()
-    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .intercept('/api/domains/v1/domains/', 'OPTIONS')
     .query(true)
     .reply(200, null)
     .persist()
-    .get('/api/domains/v1/domains')
+    .get('/api/domains/v1/domains/')
     .query(true)
     .reply(200, [
       {

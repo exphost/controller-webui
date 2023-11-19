@@ -15,7 +15,7 @@ beforeEach(() => {
     .query(true)
     .reply(200, null)
     .persist()
-    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .intercept('/api/domains/v1/domains/', 'OPTIONS')
     .query(true)
     .reply(200, null)
     .persist()
@@ -43,7 +43,7 @@ beforeEach(() => {
       ]
     })
     .persist()
-    .get('/api/domains/v1/domains')
+    .get('/api/domains/v1/domains/')
     .query(true)
     .reply(200, [
       'example.com'

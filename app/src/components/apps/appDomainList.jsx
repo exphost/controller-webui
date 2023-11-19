@@ -30,7 +30,7 @@ function AppDomainList (props) {
   }
   function loadApps () {
     const requestOptions = {
-      url: window.API_URL + '/api/domains/v1/domains',
+      url: window.API_URL + '/api/domains/v1/domains/',
       params: {
         org: props.org
       },

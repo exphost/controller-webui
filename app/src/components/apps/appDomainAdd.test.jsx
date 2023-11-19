@@ -12,11 +12,11 @@ beforeEach(() => {
       'access-control-allow-headers': 'Authorization'
     })
     .persist()
-    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .intercept('/api/domains/v1/domains/', 'OPTIONS')
     .query(true)
     .reply(200, null)
     .persist()
-    .post('/api/domains/v1/domains')
+    .post('/api/domains/v1/domains/')
     .query(true)
     .reply(201)
 })
@@ -38,10 +38,10 @@ test('submit domain app wrong response', async () => {
       'access-control-allow-headers': 'Authorization'
     })
     .persist()
-    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .intercept('/api/domains/v1/domains/', 'OPTIONS')
     .query(true)
     .reply(200, null)
-    .post('/api/domains/v1/domains')
+    .post('/api/domains/v1/domains/')
     .reply(400)
   act(() => {
     render(<AppDomainAdd org="test-org"/>)
@@ -72,10 +72,10 @@ test('submit app duplicate', async () => {
       'access-control-allow-headers': 'Authorization'
     })
     .persist()
-    .intercept('/api/domains/v1/domains', 'OPTIONS')
+    .intercept('/api/domains/v1/domains/', 'OPTIONS')
     .query(true)
     .reply(200, null)
-    .post('/api/domains/v1/domains')
+    .post('/api/domains/v1/domains/')
     .query(true)
     .reply(409)
   act(() => {
