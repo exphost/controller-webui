@@ -53,7 +53,7 @@ function AppEmailList (props) {
     axios
       .request(requestOptions)
       .then(function (response) {
-        makeTable(response.data.emails)
+        makeTable(response.data)
         return 0
       })
       .catch(function (err) {

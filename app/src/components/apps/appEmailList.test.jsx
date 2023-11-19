@@ -17,28 +17,26 @@ beforeEach(() => {
     .reply(200, null)
     .get('/api/users/v1/emails/')
     .query(true)
-    .reply(200, {
-      emails: [
-        {
-          mail: 'aa@example.com',
-          cn: 'Jan',
-          sn: 'Barski',
-          aliases: [
-            'aa@example.com',
-            'bb@example.com'
-          ]
-        },
-        {
-          mail: 'john@snow.com',
-          cn: 'John',
-          sn: 'Snow',
-          aliases: [
-            'john@snow.com',
-            'winter@iscomming.com'
-          ]
-        }
-      ]
-    })
+    .reply(200, [
+      {
+        mail: 'aa@example.com',
+        cn: 'Jan',
+        sn: 'Barski',
+        aliases: [
+          'aa@example.com',
+          'bb@example.com'
+        ]
+      },
+      {
+        mail: 'john@snow.com',
+        cn: 'John',
+        sn: 'Snow',
+        aliases: [
+          'john@snow.com',
+          'winter@iscomming.com'
+        ]
+      }
+    ])
 })
 
 test('list emails', async () => {
