@@ -25,8 +25,9 @@ describe('AppEmailAdd', () => {
   })
 
   test('show apps in console page', () => {
+    const dummyFunc = () => {}
     act(() => {
-      render(<AppEmailAdd org="test-org"/>)
+      render(<AppEmailAdd org="test-org" onAddElement={dummyFunc} />)
     })
     expect(screen.queryByText(/Email:/)).toBeInTheDocument()
     expect(screen.queryByText(/Name:/)).toBeInTheDocument()
@@ -50,8 +51,9 @@ describe('AppEmailAdd', () => {
       .post('/api/users/v1/emails/')
       .query(true)
       .reply(400)
+    const dummyFunc = () => {}
     act(() => {
-      render(<AppEmailAdd org="test-org"/>)
+      render(<AppEmailAdd org="test-org" onAddElement={dummyFunc} />)
     })
     fireEvent.change(screen.getByTestId('email-add-mail'), { target: { value: 'test-aa' } })
     fireEvent.change(screen.getByTestId('email-add-cn'), { target: { value: 'test-aa' } })
@@ -62,8 +64,9 @@ describe('AppEmailAdd', () => {
 
   test('submit email', async () => {
     window.API_URL = 'http://localhost:8080'
+    const dummyFunc = () => {}
     act(() => {
-      render(<AppEmailAdd org="qwe"/>)
+      render(<AppEmailAdd org="qwe" onAddElement={dummyFunc} />)
     })
     expect(screen.getByTestId('email-add-org')).toHaveDisplayValue('qwe')
     fireEvent.change(screen.getByTestId('email-add-mail'), { target: { value: 'test-aa' } })
@@ -95,8 +98,9 @@ describe('AppEmailAdd', () => {
   // })
   //
   test('submit email no name', async () => {
+    const dummyFunc = () => {}
     act(() => {
-      render(<AppEmailAdd org="test-org"/>)
+      render(<AppEmailAdd org="test-org" onAddElement={dummyFunc} />)
     })
     fireEvent.click(screen.getByText('Create'))
     await waitFor(() => expect(screen.getByTestId('email-add-message')).toHaveTextContent('no field Mail'))

@@ -61,6 +61,10 @@ function AppDomainList (props) {
     }
   }, [props.org])
 
+  useEffect(() => {
+    loadApps()
+  }, [props.refreshList])
+
   return (
         <React.Fragment>
         <Table striped bordered hover>
@@ -78,7 +82,8 @@ function AppDomainList (props) {
 }
 
 AppDomainList.propTypes = {
-  org: PropTypes.string.isRequired
+  org: PropTypes.string.isRequired,
+  refreshList: PropTypes.bool.isRequired
 }
 
 export default AppDomainList

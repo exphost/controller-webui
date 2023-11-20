@@ -35,6 +35,7 @@ function AppEmailAdd (props) {
       .request(requestOptions)
       .then(function (response) {
         setMessage('added ' + response.data.password)
+        props.onAddElement()
         return 0
       })
       .catch(function (err) {
@@ -89,7 +90,8 @@ function AppEmailAdd (props) {
 }
 
 AppEmailAdd.propTypes = {
-  org: PropTypes.string.isRequired
+  org: PropTypes.string.isRequired,
+  onAddElement: PropTypes.func.isRequired
 }
 
 export default AppEmailAdd

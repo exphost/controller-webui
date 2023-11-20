@@ -44,6 +44,7 @@ function AppNginxAdd (props) {
       .request(requestOptions)
       .then(function (response) {
         setMessage('added')
+        props.onAddElement()
         return 0
       })
       .catch(function (err) {
@@ -97,7 +98,8 @@ function AppNginxAdd (props) {
 }
 
 AppNginxAdd.propTypes = {
-  org: PropTypes.string.isRequired
+  org: PropTypes.string.isRequired,
+  onAddElement: PropTypes.func.isRequired
 }
 
 export default AppNginxAdd

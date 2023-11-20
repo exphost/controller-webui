@@ -70,6 +70,10 @@ function AppEmailList (props) {
     }
   }, [props.org])
 
+  useEffect(() => {
+    loadEmails()
+  }, [props.refreshList])
+
   return (
         <React.Fragment>
         <Table striped bordered hover>
@@ -89,7 +93,8 @@ function AppEmailList (props) {
 }
 
 AppEmailList.propTypes = {
-  org: PropTypes.string.isRequired
+  org: PropTypes.string.isRequired,
+  refreshList: PropTypes.bool.isRequired
 }
 
 export default AppEmailList

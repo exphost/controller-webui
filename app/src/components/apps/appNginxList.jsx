@@ -84,6 +84,10 @@ function AppNginxList (props) {
     }
   }, [props.org])
 
+  useEffect(() => {
+    loadApps()
+  }, [props.refreshList])
+
   return (
         <React.Fragment>
         <Table striped bordered hover>
@@ -103,7 +107,8 @@ function AppNginxList (props) {
 }
 
 AppNginxList.propTypes = {
-  org: PropTypes.string.isRequired
+  org: PropTypes.string.isRequired,
+  refreshList: PropTypes.bool.isRequired
 }
 
 export default AppNginxList
