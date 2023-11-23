@@ -58,6 +58,9 @@ function SideMenu (props) {
           <Nav.Item>
             <Nav.Link as={Link} to="/apps/emails" eventKey="emails">Emails</Nav.Link>
           </Nav.Item>
+          <Nav.Item>
+            <Nav.Link as={Link} to="/apps/app" eventKey="app">Apps</Nav.Link>
+          </Nav.Item>
           <hr/>
           <Nav.Item>
             <Nav.Link as={Link} to="/apps/domain">Domain</Nav.Link>
