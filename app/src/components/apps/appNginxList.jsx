@@ -55,7 +55,7 @@ function AppNginxList (props) {
   }
   function loadApps () {
     const requestOptions = {
-      url: window.API_URL + '/api/apps/v1/nginx/?org=' + props.org + '&app=app1',
+      url: window.API_URL + '/api/apps/v1/nginx/?org=' + props.org + '&app=' + props.app,
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +108,8 @@ function AppNginxList (props) {
 
 AppNginxList.propTypes = {
   org: PropTypes.string.isRequired,
-  refreshList: PropTypes.bool.isRequired
+  refreshList: PropTypes.bool.isRequired,
+  app: PropTypes.string.isRequired
 }
 
 export default AppNginxList

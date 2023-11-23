@@ -127,7 +127,7 @@ const ConsolePage = () => {
           <Route index element={<Console/>}/>
           <Route path='apps/domain' element={<AppDomain org={org}/> }/>
           <Route path='apps/emails' element={<AppEmail org={org}/> }/>
-          <Route path='apps/nginx' element={<AppNginx org={org}/> }/>
+          <Route path='apps/nginx' element={<AppNginx org={org} app={app}/> }/>
           <Route path='apps/app' element={<AppApp org={org}/> }/>
           <Route path='*' element={<Navigate to='/'/>}/>
           <Route path="register" element={<RegisterPage/> }/> {/* needed for tests :| */}

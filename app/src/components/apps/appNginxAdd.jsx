@@ -18,7 +18,7 @@ function AppNginxAdd (props) {
     }
     const values = {
       org: props.org,
-      app: 'todo',
+      app: props.app,
       name: input.name
     }
     if (input.gitrepo) {
@@ -99,7 +99,8 @@ function AppNginxAdd (props) {
 
 AppNginxAdd.propTypes = {
   org: PropTypes.string.isRequired,
-  onAddElement: PropTypes.func.isRequired
+  onAddElement: PropTypes.func.isRequired,
+  app: PropTypes.string.isRequired
 }
 
 export default AppNginxAdd

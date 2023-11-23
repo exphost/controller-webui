@@ -16,17 +16,18 @@ function AppNginx (props) {
             <h1>Nginx</h1>
           </Container>
           <Container className='my-3'>
-            <AppNginxAdd org={props.org} onAddElement={handleAddElement} />
+            <AppNginxAdd org={props.org} onAddElement={handleAddElement} app={props.app} />
           </Container>
           <Container className='my-3'>
-            <AppNginxList org={props.org} refreshList={refreshList} />
+            <AppNginxList org={props.org} refreshList={refreshList} app={props.app} />
           </Container>
       </React.Fragment>
   )
 }
 
 AppNginx.propTypes = {
-  org: PropTypes.string.isRequired
+  org: PropTypes.string.isRequired,
+  app: PropTypes.string.isRequired
 }
 
 export default AppNginx
