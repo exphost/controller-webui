@@ -68,11 +68,7 @@ function AppEmailList (props) {
     } else {
       loadEmails()
     }
-  }, [props.org])
-
-  useEffect(() => {
-    loadEmails()
-  }, [props.refreshList])
+  }, [props.org, props.refreshList])
 
   return (
         <React.Fragment>

@@ -82,11 +82,7 @@ function AppNginxList (props) {
     } else {
       loadApps()
     }
-  }, [props.org])
-
-  useEffect(() => {
-    loadApps()
-  }, [props.refreshList])
+  }, [props.org, props.app, props.refreshList])
 
   return (
         <React.Fragment>

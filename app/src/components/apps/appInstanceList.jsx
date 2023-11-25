@@ -37,11 +37,8 @@ function AppInstanceList (props) {
   }
   useEffect(() => {
     loadApps()
-  }, [props.org])
+  }, [props.org, props.app, props.refreshList])
 
-  useEffect(() => {
-    loadApps()
-  }, [props.refreshList])
   return (
         <React.Fragment>
         <Table striped bordered hover>

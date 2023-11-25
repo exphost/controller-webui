@@ -59,11 +59,7 @@ function AppDomainList (props) {
     } else {
       loadApps()
     }
-  }, [props.org])
-
-  useEffect(() => {
-    loadApps()
-  }, [props.refreshList])
+  }, [props.org, props.refreshList])
 
   return (
         <React.Fragment>
