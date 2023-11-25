@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import AppAppAdd from './appAppAdd'
 import AppAppList from './appAppList'
 import PropTypes from 'prop-types'
 
 function AppApp (props) {
+  useEffect(() => {
+    document.title = 'Exphost - Applications'
+  }, [])
+
   return (
       <React.Fragment>
           <Container>

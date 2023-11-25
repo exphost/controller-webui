@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import AppEmailAdd from './appEmailAdd'
 import AppEmailList from './appEmailList'
@@ -9,6 +9,10 @@ function AppEmail (props) {
   const handleAddElement = () => {
     setRefreshList(!refreshList)
   }
+
+  useEffect(() => {
+    document.title = 'Exphost - Emails'
+  }, [])
 
   return (
       <React.Fragment>

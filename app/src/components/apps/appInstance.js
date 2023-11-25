@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import AppInstanceAdd from './appInstanceAdd'
 import AppInstanceList from './appInstanceList'
@@ -9,6 +9,11 @@ function AppInstance (props) {
   const handleAddElement = () => {
     setRefreshList(!refreshList)
   }
+
+  useEffect(() => {
+    document.title = 'Exphost - Instances'
+  }, [])
+
   return (
       <React.Fragment>
           <Container>

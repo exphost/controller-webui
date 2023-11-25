@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import AppDomainAdd from './appDomainAdd'
 import AppDomainList from './appDomainList'
@@ -9,6 +9,10 @@ function AppDomain (props) {
   const handleAddElement = () => {
     setRefreshList(!refreshList)
   }
+
+  useEffect(() => {
+    document.title = 'Exphost - Domains'
+  }, [])
 
   return (
       <React.Fragment>

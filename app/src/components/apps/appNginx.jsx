@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container } from 'react-bootstrap'
 import AppNginxAdd from './appNginxAdd'
 import AppNginxList from './appNginxList'
@@ -9,6 +9,10 @@ function AppNginx (props) {
   const handleAddElement = () => {
     setRefreshList(!refreshList)
   }
+
+  useEffect(() => {
+    document.title = 'Exphost - Nginx'
+  }, [])
 
   return (
       <React.Fragment>
