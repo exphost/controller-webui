@@ -19,19 +19,25 @@ function AppNginxAdd (props) {
     const values = {
       org: props.org,
       app: props.app,
-      name: input.name
+      name: input.name,
+      spec: {
+        helm: {
+          type: 'nginx'
+        },
+        config: {}
+      }
     }
     if (input.gitrepo) {
-      values.config.git.repo = input.gitrepo
+      values.spec.config.git.repo = input.gitrepo
       if (input.gitbranch) {
-        values.config.git.branch = input.gitbranch
+        values.spec.config.git.branch = input.gitbranch
       }
     }
     if (input.fqdn) {
-      values.config.fqdns = [input.fqdn]
+      values.spec.config.hostnames = [input.fqdn]
     }
     const requestOptions = {
-      url: window.API_URL + '/api/apps/v1/nginx/',
+      url: window.API_URL + '/api/apps/v1/components/',
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

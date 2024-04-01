@@ -13,9 +13,9 @@ describe('AppNginxAdd', () => {
         'access-control-allow-headers': 'Authorization'
       })
       .persist()
-      .intercept('/api/apps/v1/nginx/', 'OPTIONS')
+      .intercept('/api/apps/v1/components/', 'OPTIONS')
       .reply(200, null)
-      .post('/api/apps/v1/nginx/')
+      .post('/api/apps/v1/components/')
       .reply(201)
   })
 
@@ -38,9 +38,9 @@ describe('AppNginxAdd', () => {
         'access-control-allow-headers': 'Authorization'
       })
       .persist()
-      .intercept('/api/apps/v1/nginx/', 'OPTIONS')
+      .intercept('/api/apps/v1/components/', 'OPTIONS')
       .reply(200, null)
-      .post('/api/apps/v1/nginx/')
+      .post('/api/apps/v1/components/')
       .reply(400)
     act(() => {
       render(<AppNginxAdd org="test-org"/>)
@@ -69,9 +69,9 @@ describe('AppNginxAdd', () => {
         'access-control-allow-headers': 'Authorization'
       })
       .persist()
-      .intercept('/api/apps/v1/nginx/', 'OPTIONS')
+      .intercept('/api/apps/v1/components/', 'OPTIONS')
       .reply(200, null)
-      .post('/api/apps/v1/nginx/')
+      .post('/api/apps/v1/components/')
       .reply(409)
     render(<AppNginxAdd org="test-org"/>)
     fireEvent.change(screen.getByTestId('nginx-add-name'), { target: { value: 'test-aa' } })

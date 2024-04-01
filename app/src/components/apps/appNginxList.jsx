@@ -7,55 +7,35 @@ function AppNginxList (props) {
   const [apps, setApps] = useState(<tr><td>0</td><td span="2">Loading</td></tr>)
 
   function makeTable (content) {
-    setApps(content.map((app, index) => (
-      <tr key={index}>
-        <td>{ index }</td>
-        <td>{ app.name }</td>
-        <td>{ app.org }</td>
-        <td>
-          { app.config?.fqdns
-            ? <ul>
-                { app.config.fqdns.map((fqdn, index) => <li key={index}> <a href={'https://' + fqdn} target="_blank" rel="noopener noreferrer">{ fqdn }</a></li>)}
-              </ul>
-            : '' }
-        </td>
-        <td>
-          { app.config?.git ? app.config.git.repo + ' / ' + app.config.git.branch : '' }
-        </td>
-      </tr>
-    )))
+    setApps(Object.keys(content).map((key, index) => {
+      return (
+        <tr key={key}>
+        <td>{index + 1}</td>
+        <td>{key}</td>
+        <td>{content[key].config?.hostnames ? content[key].config.hostnames.join(', ') : ''}</td>
+        <td>{content[key].config?.git ? content[key].config.git.repo + ' / ' + content[key].config.git.branch : ''}</td>
+        </tr>
+      )
+    }))
   }
   function loadAppsMock () {
-    const apps = [
-      {
-        name: 'nginx1',
-        org: 'org1',
-        app: 'app1',
+    const apps = {
+      n1: {
         config: {
-          fqdns: ['fqdn1'],
+          hostnames: ['fqdn1'],
           git: {
             repo: 'repo1',
             branch: 'branch1'
           }
         }
       },
-      {
-        name: 'nginx2',
-        org: 'org1',
-        app: 'app2',
-        config: {
-          fqdns: ['fqdn2'],
-          git: {
-            repo: 'repo2'
-          }
-        }
-      }
-    ]
+      n2: {}
+    }
     makeTable(apps)
   }
   function loadApps () {
     const requestOptions = {
-      url: window.API_URL + '/api/apps/v1/nginx/?org=' + props.org + '&app=' + props.app,
+      url: window.API_URL + '/api/apps/v1/components/?org=' + props.org + '&app=' + props.app + '&type=nginx',
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -67,11 +47,11 @@ function AppNginxList (props) {
       .request(requestOptions)
       .then(function (response) {
         const res = response.data // Response received from the API
-        makeTable(res.nginx)
+        makeTable(res)
         return 0
       })
       .catch(function (err) {
-        console.log('submit failed', err.response)
+        console.log('submit failed', err, err.response)
         // alert("Submit failed")
       })
   }
@@ -90,7 +70,6 @@ function AppNginxList (props) {
           <thead><tr>
             <th>Id</th>
             <th>Name</th>
-            <th>Org</th>
             <th>Fqdns</th>
             <th>Git</th>
           </tr></thead>
