@@ -7,6 +7,7 @@ import AppDomain from '../components/apps/appDomain'
 import AppEmail from '../components/apps/appEmail'
 import AppApp from '../components/apps/appApp'
 import AppInstance from '../components/apps/appInstance'
+import AppVersion from '../components/apps/appVersion'
 import axios from 'axios'
 import RegisterPage from './Register'
 import TopNav from '../components/top_nav'
@@ -127,6 +128,7 @@ const ConsolePage = () => {
         <Route>
           <Route index element={<Console/>}/>
           <Route path='apps/domain' element={<AppDomain org={org}/> }/>
+          <Route path='apps/versions' element={<AppVersion org={org} app={app}/> }/>
           <Route path='apps/instances' element={<AppInstance org={org} app={app}/> }/>
           <Route path='apps/emails' element={<AppEmail org={org}/> }/>
           <Route path='apps/nginx' element={<AppNginx org={org} app={app}/> }/>

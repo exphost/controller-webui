@@ -15,7 +15,6 @@ beforeEach(() => {
     .query(true)
     .reply(200, null)
     .persist()
-    .persist()
     .get('/api/apps/v1/app/')
     .query(true)
     .reply(200, [
