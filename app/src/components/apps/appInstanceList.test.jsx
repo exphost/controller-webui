@@ -27,12 +27,14 @@ describe('AppInstanceList', () => {
       master: {
         values: {
           env: 'prod'
-        }
+        },
+        version: '1.0.0'
       },
       dev: {
         values: {
           env: 'devel'
-        }
+        },
+        version: '2.0.0'
       }
     })
     window.API_URL = 'http://localhost:8080'

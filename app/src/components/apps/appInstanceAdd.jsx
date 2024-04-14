@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button } from 'react-bootstrap'
+import { getVersions } from './appVersionList'
 // import React, { useState, useEffect } from 'react'
 // import { Table } from 'react-bootstrap'
 import axios from 'axios'
@@ -8,6 +9,20 @@ import PropTypes from 'prop-types'
 function AppInstanceAdd (props) {
   const [message, setMessage] = useState('')
   const [input, setInputs] = useState({})
+  const [versions, setVersions] = useState(['loading'])
+
+  useEffect(() => {
+    const fetchVersions = async () => {
+      try {
+        const versionsData = await getVersions(props)
+        setVersions(versionsData)
+      } catch (error) {
+        console.error('Error fetching versions:', error)
+      }
+    }
+
+    fetchVersions()
+  }, [props.org, props.app])
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -19,14 +34,20 @@ function AppInstanceAdd (props) {
         return 2
       }
     }
-    console.log('config')
-    console.log(input.config)
-    console.log(JSON.parse(input.config))
+
+    console.log('input:', input)
+    console.log('version:', input.version)
+    const config = input.config ? { values: JSON.parse(input.config) } : { values: {} }
+    if (!config.values) {
+      config.values = {}
+    }
+    config.version = input.version
+    console.log('config:', config)
     const values = {
       org: props.org,
       app: props.app,
       name: input.name,
-      config: JSON.parse(input.config)
+      config
     }
     const requestOptions = {
       url: window.API_URL + '/api/apps/v1/instances/',
@@ -77,6 +98,14 @@ function AppInstanceAdd (props) {
             <Form.Group controlId="instance_config">
                 <Form.Label>config:</Form.Label>
                 <Form.Control data-testid="instance-add-config" name="config" onChange={handleChange}/>
+            </Form.Group>
+            <Form.Group controlId="instance_version">
+                <Form.Label>version:</Form.Label>
+                <Form.Control data-testid="instance-add-version" name="version" as="select" onChange={handleChange}>
+                    {versions.map((version, index) => (
+                        <option key={index}>{version}</option>
+                    ))}
+                </Form.Control>
             </Form.Group>
             <input data-testid="instance-add-org" name="org" type="hidden" value={props.org}/>
             <Button type="submit" data-testid="instance-add-submit" className='my-3'>Create</Button>

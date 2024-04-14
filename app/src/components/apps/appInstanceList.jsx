@@ -10,6 +10,7 @@ function AppInstanceList (props) {
       <tr key={index}>
         <td>{ index }</td>
         <td>{ instanceName }</td>
+        <td>{ instanceConfig.version }</td>
       </tr>
     )))
   }
@@ -45,6 +46,7 @@ function AppInstanceList (props) {
           <thead><tr>
             <th>Id</th>
             <th>Name</th>
+            <th>Version</th>
           </tr></thead>
           <tbody>
           {instances}

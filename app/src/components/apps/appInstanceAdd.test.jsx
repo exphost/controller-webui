@@ -18,14 +18,23 @@ function nockSetup (returnCode) {
     .post('/api/apps/v1/instances/')
     .query(true)
     .reply(returnCode)
+    .intercept('/api/apps/v1/versions/', 'OPTIONS')
+    .query(true)
+    .reply(200, null)
+    .persist()
+    .get('/api/apps/v1/versions/')
+    .query(true)
+    .reply(200, { versions: ['v1', 'v2'] })
 }
 
 describe('AppInstanceAdd', () => {
   test('show create instance form', () => {
     nockSetup(201)
-    render(<AppInstanceAdd org="test-org" app='test-1' />)
+    window.API_URL = 'http://localhost:8080'
+    render(<AppInstanceAdd org="test-org" app='test-1' onAddElement={() => {}} />)
     expect(screen.getByTestId('instance-add-org')).toBeInTheDocument()
     expect(screen.getByTestId('instance-add-config')).toBeInTheDocument()
+    expect(screen.getByTestId('instance-add-version')).toBeInTheDocument()
     expect(screen.getByTestId('instance-add-submit')).toBeInTheDocument()
   })
 
@@ -33,12 +42,13 @@ describe('AppInstanceAdd', () => {
     nockSetup(201)
     window.API_URL = 'http://localhost:8080'
     act(() => {
-      render(<AppInstanceAdd org="qwe" app="app-1" />)
+      render(<AppInstanceAdd org="qwe" app="app-1" onAddElement={() => {}} />)
     })
     expect(screen.getByTestId('instance-add-org')).toHaveDisplayValue('qwe')
     act(() => {
       fireEvent.change(screen.getByTestId('instance-add-name'), { target: { value: 'test-aa' } })
       fireEvent.change(screen.getByTestId('instance-add-config'), { target: { value: '{"key": "value"}' } })
+      fireEvent.change(screen.getByTestId('instance-add-version'), { target: { value: 'v1' } })
     })
     act(() => {
       fireEvent.click(screen.getByTestId('instance-add-submit'))
@@ -50,11 +60,12 @@ describe('AppInstanceAdd', () => {
     nockSetup(400)
     window.API_URL = 'http://localhost:8080'
     act(() => {
-      render(<AppInstanceAdd org="test-org" app='test-1'/>)
+      render(<AppInstanceAdd org="test-org" app='test-1' onAddElement={() => {}} />)
     })
     act(() => {
       fireEvent.change(screen.getByTestId('instance-add-name'), { target: { value: 'test-aa' } })
       fireEvent.change(screen.getByTestId('instance-add-config'), { target: { value: '{"key": "value"}' } })
+      fireEvent.change(screen.getByTestId('instance-add-version'), { target: { value: 'v1' } })
     })
     act(() => {
       fireEvent.click(screen.getByText('Create'))
@@ -66,11 +77,12 @@ describe('AppInstanceAdd', () => {
     nockSetup(409)
     window.API_URL = 'http://localhost:8080'
     act(() => {
-      render(<AppInstanceAdd org="test-org" app='test-1'/>)
+      render(<AppInstanceAdd org="test-org" app='test-1' onAddElement={() => {}} />)
     })
     act(() => {
       fireEvent.change(screen.getByTestId('instance-add-name'), { target: { value: 'test-aa' } })
       fireEvent.change(screen.getByTestId('instance-add-config'), { target: { value: '{"key": "value"}' } })
+      fireEvent.change(screen.getByTestId('instance-add-version'), { target: { value: 'v1' } })
     })
     act(() => {
       fireEvent.click(screen.getByTestId('instance-add-submit'))
@@ -80,9 +92,21 @@ describe('AppInstanceAdd', () => {
 
   test('submit instance with no name', async () => {
     act(() => {
-      render(<AppInstanceAdd org="test-org" app='test-1'/>)
+      render(<AppInstanceAdd org="test-org" app='test-1' onAddElement={() => {}} />)
       fireEvent.click(screen.getByTestId('instance-add-submit'))
     })
     await waitFor(() => expect(screen.getByTestId('instance-add-message')).toHaveTextContent('no field name'))
+  })
+
+  test('check versions checkbox', async () => {
+    nockSetup(201)
+    window.API_URL = 'http://localhost:8080'
+    act(() => {
+      render(<AppInstanceAdd org="test-org" app='test-1' onAddElement={() => {}} />)
+    })
+    await waitFor(() => {
+      expect(screen.getByTestId('instance-add-version')).toHaveTextContent('v1')
+      expect(screen.getByTestId('instance-add-version')).toHaveTextContent('v2')
+    })
   })
 })

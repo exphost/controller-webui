@@ -71,3 +71,4 @@ AppVersionList.propTypes = {
 }
 
 export default AppVersionList
+export { getVersions }
