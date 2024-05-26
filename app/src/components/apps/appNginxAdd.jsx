@@ -28,6 +28,9 @@ function AppNginxAdd (props) {
       }
     }
     if (input.gitrepo) {
+      if (!values.spec.config.git) {
+        values.spec.config.git = {}
+      }
       values.spec.config.git.repo = input.gitrepo
       if (input.gitbranch) {
         values.spec.config.git.branch = input.gitbranch

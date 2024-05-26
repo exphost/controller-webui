@@ -84,4 +84,15 @@ describe('AppNginxAdd', () => {
     fireEvent.click(screen.getByText('Create'))
     await waitFor(() => expect(screen.getByTestId('nginx-add-message')).toHaveTextContent('no field name'))
   })
+
+  test('submit nginx app with git', async () => {
+    window.API_URL = 'http://localhost:8080'
+    render(<AppNginxAdd org="qwe" onAddElement={() => {}}/>)
+    expect(screen.getByTestId('nginx-add-org')).toHaveDisplayValue('qwe')
+    fireEvent.change(screen.getByTestId('nginx-add-name'), { target: { value: 'test-aa' } })
+    fireEvent.change(screen.getByTestId('nginx-add-git-repo'), { target: { value: 'https://github.com/user/repo' } })
+    fireEvent.change(screen.getByTestId('nginx-add-git-branch'), { target: { value: 'master' } })
+    fireEvent.click(screen.getByText('Create'))
+    await waitFor(() => expect(screen.getByTestId('nginx-add-message')).toHaveTextContent('added'))
+  })
 })
