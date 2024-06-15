@@ -20,7 +20,7 @@ get version:
 
 buildapp:
   stage: build_app
-  image: quay.io/podman/stable
+  image: quay.io/podman/stable:v4
   extends: .registry
   script:
     - podman --root podman pull ${CI_REGISTRY_IMAGE}:${CI_COMMIT_SHORT_SHA}-dev || true
@@ -58,7 +58,7 @@ lint:
    
 build:
   stage: build
-  image: quay.io/podman/stable
+  image: quay.io/podman/stable:v4
   extends: .registry
   script:
     - podman pull $CI_REGISTRY_IMAGE:latest || true
@@ -75,7 +75,7 @@ build:
 push latest:
   variables:
     GIT_STRATEGY: none
-  image: quay.io/podman/stable
+  image: quay.io/podman/stable:v4
   stage: push
   extends: .registry
   script:
@@ -91,7 +91,7 @@ push latest:
 push tag:
   variables:
     GIT_STRATEGY: none
-  image: quay.io/podman/stable
+  image: quay.io/podman/stable:v4
   stage: push
   extends: .registry
   script:

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 function AppDomain (props) {
   const [refreshList, setRefreshList] = useState(false)
-  const handleAddElement = () => {
+  const handleChangeElement = () => {
     setRefreshList(!refreshList)
   }
 
@@ -20,10 +20,10 @@ function AppDomain (props) {
             <h1>Domain</h1>
           </Container>
           <Container className='my-3'>
-            <AppDomainAdd org={props.org} onAddElement={handleAddElement} />
+            <AppDomainAdd org={props.org} onChangeElement={handleChangeElement} />
           </Container>
           <Container className='my-3'>
-            <AppDomainList org={props.org} refreshList={refreshList} />
+            <AppDomainList org={props.org} refreshList={refreshList} onChangeElement={handleChangeElement} />
           </Container>
       </React.Fragment>
   )

@@ -34,7 +34,7 @@ function AppDomainAdd (props) {
       .request(requestOptions)
       .then(function (response) {
         setMessage('added')
-        props.onAddElement()
+        props.onChangeElement()
         return 0
       })
       .catch(function (err) {
@@ -76,7 +76,7 @@ function AppDomainAdd (props) {
 
 AppDomainAdd.propTypes = {
   org: PropTypes.string.isRequired,
-  onAddElement: PropTypes.func.isRequired
+  onChangeElement: PropTypes.func.isRequired
 }
 
 export default AppDomainAdd

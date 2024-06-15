@@ -33,8 +33,27 @@ beforeEach(() => {
 test('list domains', async () => {
   window.API_URL = 'http://localhost:8080'
   act(() => {
-    render(<AppDomainList org='test-org'/>)
+    render(<AppDomainList org='test-org' refreshList={false} onChangeElement={() => {}} />)
   })
   await waitFor(() => expect(screen.getByText('example.com')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('example2.com')).toBeInTheDocument)
 })
+
+// test('delete domain', async () => {
+//   window.API_URL = 'http://localhost:8080'
+//   nock('http://localhost:8080')
+//     .delete('/api/domains/v1/domains/')
+//     .query(true)
+//     .reply(204)
+//   act(() => {
+//     render(<AppDomainList org='test-org'/>)
+//   })
+//   await waitFor(() => expect(screen.getByText('example.com')).toBeInTheDocument)
+//   await waitFor(() => expect(screen.getByText('example2.com')).toBeInTheDocument)
+//   await waitFor(() => expect(screen.getByTestId('delete-example.com')).toBeInTheDocument)
+//   act(() => {
+//     screen.getByTestId('delete-example.com').click()
+//   })
+//   await waitFor(() => expect(screen.queryByText('example.com')).not.toBeInTheDocument)
+//   await waitFor(() => expect(screen.getByText('example2.com')).toBeInTheDocument)
+// }

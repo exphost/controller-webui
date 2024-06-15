@@ -4,7 +4,29 @@ import axios from 'axios'
 import PropTypes from 'prop-types'
 
 function AppDomainList (props) {
-  const [apps, setApps] = useState(<tr><td>0</td><td span="2">Loading</td></tr>)
+  const [apps, setApps] = useState(<tr><td>0</td><td span="3">Loading</td></tr>)
+  const [message, setMessage] = useState('')
+
+  const handleDelete = async (name) => {
+    event.preventDefault()
+    const requestOptions = {
+      url: window.API_URL + '/api/domains/v1/domains/?org=' + props.org + '&name=' + name,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + window.localStorage.getItem('access_token')
+      },
+      responseType: 'json'
+    }
+    try {
+      await axios.request(requestOptions)
+      setMessage('Domain deleted')
+      props.onChangeElement()
+    } catch (error) {
+      setMessage('Error deleting domain')
+      console.error('Error deleting domain:', error)
+    }
+  }
 
   function makeTable (content) {
     setApps(content.map((app, index) => (
@@ -12,6 +34,7 @@ function AppDomainList (props) {
         <td>{ index }</td>
         <td>{ app.name }</td>
         <td>{ app.org }</td>
+        <td><button onClick={() => handleDelete(app.name)}>Delete</button></td>
       </tr>
     )))
   }
@@ -73,13 +96,15 @@ function AppDomainList (props) {
           {apps}
           </tbody>
         </Table>
+        <p data-testid='domain-list-message'>{message}</p>
         </React.Fragment>
   )
 }
 
 AppDomainList.propTypes = {
   org: PropTypes.string.isRequired,
-  refreshList: PropTypes.bool.isRequired
+  refreshList: PropTypes.bool.isRequired,
+  onChangeElement: PropTypes.func.isRequired
 }
 
 export default AppDomainList
