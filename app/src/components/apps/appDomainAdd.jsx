@@ -43,11 +43,11 @@ function AppDomainAdd (props) {
             setMessage('error 1: already exists')
             return 1
           }
-          console.log('error 2: submit failed')
+          // console.log('error 2: submit failed')
           setMessage('error 2: submit failed')
           return 2
         }
-        console.log('error 3: submit error')
+        // console.log('error 3: submit error')
         setMessage('error 3: submit error')
       })
     setMessage('adding...')

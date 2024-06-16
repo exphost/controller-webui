@@ -23,7 +23,7 @@ beforeEach(() => {
 
 test('show apps in console page', () => {
   act(() => {
-    render(<AppDomainAdd org="test-org"/>)
+    render(<AppDomainAdd org="test-org" refreshList={false} onChangeElement={() => {}}/>)
   })
   expect(screen.queryByText(/name/i)).toBeInTheDocument()
 })
@@ -44,7 +44,7 @@ test('submit domain app wrong response', async () => {
     .post('/api/domains/v1/domains/')
     .reply(400)
   act(() => {
-    render(<AppDomainAdd org="test-org"/>)
+    render(<AppDomainAdd org="test-org" refreshList={false} onChangeElement={() => {}}/>)
   })
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))
@@ -54,7 +54,7 @@ test('submit domain app wrong response', async () => {
 test('submit domain', async () => {
   window.API_URL = 'http://localhost:8080'
   act(() => {
-    render(<AppDomainAdd org="qwe"/>)
+    render(<AppDomainAdd org="qwe" refreshList={false} onChangeElement={() => {}}/>)
   })
   expect(screen.getByTestId('domain-add-org')).toHaveDisplayValue('qwe')
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
@@ -79,7 +79,7 @@ test('submit app duplicate', async () => {
     .query(true)
     .reply(409)
   act(() => {
-    render(<AppDomainAdd org="test-org"/>)
+    render(<AppDomainAdd org="test-org" refreshList={false} onChangeElement={() => {}}/>)
   })
   fireEvent.change(screen.getByTestId('domain-add-name'), { target: { value: 'test-aa' } })
   fireEvent.click(screen.getByText('Create'))
@@ -88,7 +88,7 @@ test('submit app duplicate', async () => {
 
 test('submit domain no name', async () => {
   act(() => {
-    render(<AppDomainAdd org="test-org"/>)
+    render(<AppDomainAdd org="test-org" refreshList={false} onChangeElement={() => {}}/>)
   })
   fireEvent.click(screen.getByText('Create'))
   await waitFor(() => expect(screen.getByTestId('domain-add-message')).toHaveTextContent('no field name'))

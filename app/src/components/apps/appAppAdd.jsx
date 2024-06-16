@@ -48,7 +48,7 @@ function AppAppAdd (props) {
           setMessage('error 2: submit failed')
           return 2
         }
-        console.log('error 3: submit error')
+        // console.log('error 3: submit error')
         setMessage('error 3: submit error')
         return 3
         // alert("Submit failed")

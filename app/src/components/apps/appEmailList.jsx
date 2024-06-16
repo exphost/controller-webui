@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 
 function AppEmailList (props) {
   const [emails, setEmails] = useState(<tr><td>0</td><td colSpan="4">Loading</td></tr>)
+  const [message, setMessage] = useState('')
 
   function makeTable (content) {
     setEmails(content.map((email, index) => (
@@ -57,7 +58,8 @@ function AppEmailList (props) {
         return 0
       })
       .catch(function (err) {
-        console.log('submit failed', err.response)
+        // console.log('submit failed', err.response)
+        setMessage('Error submit failed', err.response)
         // alert("Submit failed")
       })
   }
@@ -84,6 +86,7 @@ function AppEmailList (props) {
           {emails}
           </tbody>
         </Table>
+        <p data-testid="message">{message}</p>
         </React.Fragment>
   )
 }

@@ -5,6 +5,7 @@ import PropTypes from 'prop-types'
 
 function AppNginxList (props) {
   const [apps, setApps] = useState(<tr><td>0</td><td span="2">Loading</td></tr>)
+  const [message, setMessage] = useState('')
 
   function makeTable (content) {
     setApps(Object.keys(content).map((key, index) => {
@@ -51,7 +52,8 @@ function AppNginxList (props) {
         return 0
       })
       .catch(function (err) {
-        console.log('submit failed', err, err.response)
+        // console.log('submit failed', err, err.response)
+        setMessage('Error submit failed', err.response)
         // alert("Submit failed")
       })
   }
@@ -77,6 +79,7 @@ function AppNginxList (props) {
           {apps}
           </tbody>
         </Table>
+        <p data-testid="message">{message}</p>
         </React.Fragment>
   )
 }

@@ -41,7 +41,7 @@ beforeEach(() => {
 
 test('list emails', async () => {
   window.API_URL = 'http://localhost:8080'
-  render(<AppEmailList org='test-org'/>)
+  render(<AppEmailList org='test-org' refreshList={false}/>)
   await waitFor(() => expect(screen.getAllByText('aa@example.com')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('winter@iscomming.com')).toBeInTheDocument)
 })

@@ -24,7 +24,7 @@ function AppDomainList (props) {
       props.onChangeElement()
     } catch (error) {
       setMessage('Error deleting domain')
-      console.error('Error deleting domain:', error)
+      // console.error('Error deleting domain:', error)
     }
   }
 
@@ -71,7 +71,8 @@ function AppDomainList (props) {
         return 0
       })
       .catch(function (err) {
-        console.log('submit failed', err.response)
+        // console.log('submit failed', err.response)
+        setMessage('Error submit failed', err.response)
         // alert("Submit failed")
       })
   }

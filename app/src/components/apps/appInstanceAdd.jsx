@@ -35,14 +35,14 @@ function AppInstanceAdd (props) {
       }
     }
 
-    console.log('input:', input)
-    console.log('version:', input.version)
+    // console.log('input:', input)
+    // console.log('version:', input.version)
     const config = input.config ? { values: JSON.parse(input.config) } : { values: {} }
     if (!config.values) {
       config.values = {}
     }
     config.version = input.version
-    console.log('config:', config)
+    // console.log('config:', config)
     const values = {
       org: props.org,
       app: props.app,
@@ -75,7 +75,7 @@ function AppInstanceAdd (props) {
           setMessage('error 2: submit failed')
           return 2
         }
-        console.log('error 3: submit error')
+        // console.log('error 3: submit error')
         setMessage('error 3: submit error')
         return 3
         // alert("Submit failed")

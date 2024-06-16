@@ -5,6 +5,8 @@ import PropTypes from 'prop-types'
 
 function AppInstanceList (props) {
   const [instances, setInstances] = useState(<tr><td>0</td><td span="2">Loading</td></tr>)
+  const [message, setMessage] = useState('')
+
   function makeTable (content) {
     setInstances(Object.entries(content).map(([instanceName, instanceConfig], index) => (
       <tr key={index}>
@@ -32,7 +34,8 @@ function AppInstanceList (props) {
         return 0
       })
       .catch(function (err) {
-        console.log('submit failed', err.response)
+        // console.log('submit failed', err.response)
+        setMessage('Error submit failed', err.response)
         // alert("Submit failed")
       })
   }
@@ -52,6 +55,7 @@ function AppInstanceList (props) {
           {instances}
           </tbody>
         </Table>
+        <p data-testid="message">{message}</p>
         </React.Fragment>
   )
 }

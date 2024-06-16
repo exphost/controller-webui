@@ -19,6 +19,7 @@ const ConsolePage = () => {
   const [app, setApp] = useState('ini')
   const [apps, setApps] = useState(['none'])
   const navigate = useNavigate()
+  const [message, setMessage] = useState('')
 
   function getUserinfoMock () {
     setUser({
@@ -31,6 +32,9 @@ const ConsolePage = () => {
   }
 
   function getApps (org) {
+    if (org === 'ini') {
+      return
+    }
     const requestOptions = {
       url: window.API_URL + '/api/apps/v1/app/',
       params: {
@@ -51,7 +55,8 @@ const ConsolePage = () => {
         setApps(res)
       })
       .catch(function (err) {
-        console.log('getApps error', err.response)
+        // console.log('getApps error', err.response)
+        setMessage('Error getting apps', err.response)
         setApps(['none'])
         // alert("Submit failed")
       })
@@ -76,7 +81,8 @@ const ConsolePage = () => {
         return 0
       })
       .catch(function (err) {
-        console.log('getUserinfo error', err.response)
+        // console.log('getUserinfo error', err.response)
+        setMessage('Error getting userinfo', err.response)
         setUser(null)
         // alert("Submit failed")
       })
@@ -139,6 +145,7 @@ const ConsolePage = () => {
       </Routes>
       </Col>
     </Row>
+    <p data-testid='message'>{message}</p>
     <p>bottom</p>
     </React.Fragment>
   )

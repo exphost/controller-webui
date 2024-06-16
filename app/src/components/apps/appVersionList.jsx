@@ -16,7 +16,7 @@ async function getVersions (props) {
   return await axios
     .request(requestOptions)
     .then(response => {
-      console.log('Response:', response.data)
+      // console.log('Response:', response.data)
       return response.data.versions
     })
     .catch(error => {
@@ -41,7 +41,7 @@ function AppVersionList (props) {
     fetchVersions()
   }, [props.org, props.app, props.refreshList])
 
-  console.log('Versions:', versions)
+  // console.log('Versions:', versions)
 
   return (
     <React.Fragment>

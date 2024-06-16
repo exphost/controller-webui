@@ -20,7 +20,7 @@ describe('AppNginxAdd', () => {
   })
 
   test('show apps in console page', () => {
-    render(<AppNginxAdd org="test-org"/>)
+    render(<AppNginxAdd org="test-org" onAddElement={() => {}} app="test-app"/>)
     expect(screen.queryByText(/name/i)).toBeInTheDocument()
     expect(screen.queryByText(/git repo/i)).toBeInTheDocument()
     expect(screen.queryByText(/git branch/i)).toBeInTheDocument()
@@ -43,7 +43,7 @@ describe('AppNginxAdd', () => {
       .post('/api/apps/v1/components/')
       .reply(400)
     act(() => {
-      render(<AppNginxAdd org="test-org"/>)
+      render(<AppNginxAdd org="test-org" onAddElement={() => {}} app="test-app"/>)
     })
     fireEvent.change(screen.getByTestId('nginx-add-name'), { target: { value: 'test-aa' } })
     fireEvent.click(screen.getByText('Create'))
@@ -52,7 +52,7 @@ describe('AppNginxAdd', () => {
 
   test('submit nginx app', async () => {
     window.API_URL = 'http://localhost:8080'
-    render(<AppNginxAdd org="qwe"/>)
+    render(<AppNginxAdd org="qwe" onAddElement={() => {}} app="test-app"/>)
     expect(screen.getByTestId('nginx-add-org')).toHaveDisplayValue('qwe')
     fireEvent.change(screen.getByTestId('nginx-add-name'), { target: { value: 'test-aa' } })
     fireEvent.click(screen.getByText('Create'))
@@ -73,21 +73,21 @@ describe('AppNginxAdd', () => {
       .reply(200, null)
       .post('/api/apps/v1/components/')
       .reply(409)
-    render(<AppNginxAdd org="test-org"/>)
+    render(<AppNginxAdd org="test-org" onAddElement={() => {}} app="test-app"/>)
     fireEvent.change(screen.getByTestId('nginx-add-name'), { target: { value: 'test-aa' } })
     fireEvent.click(screen.getByText('Create'))
     await waitFor(() => expect(screen.getByTestId('nginx-add-message')).toHaveTextContent('already exists'))
   })
 
   test('submit nginx app no name', async () => {
-    render(<AppNginxAdd org="test-org"/>)
+    render(<AppNginxAdd org="test-org" onAddElement={() => {}} app="test-app"/>)
     fireEvent.click(screen.getByText('Create'))
     await waitFor(() => expect(screen.getByTestId('nginx-add-message')).toHaveTextContent('no field name'))
   })
 
   test('submit nginx app with git', async () => {
     window.API_URL = 'http://localhost:8080'
-    render(<AppNginxAdd org="qwe" onAddElement={() => {}}/>)
+    render(<AppNginxAdd org="qwe" onAddElement={() => {}} app="test-app"/>)
     expect(screen.getByTestId('nginx-add-org')).toHaveDisplayValue('qwe')
     fireEvent.change(screen.getByTestId('nginx-add-name'), { target: { value: 'test-aa' } })
     fireEvent.change(screen.getByTestId('nginx-add-git-repo'), { target: { value: 'https://github.com/user/repo' } })

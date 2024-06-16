@@ -10,6 +10,7 @@ function RegisterForm () {
     password: '',
     password2: ''
   })
+  const [message, setMessage] = useState('')
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -46,7 +47,8 @@ function RegisterForm () {
         alert('Submit successfuly')
       })
       .catch(function (error) {
-        console.log('Submit failed', error.response)
+        // console.log('Submit failed', error.response)
+        setMessage('Error submit failed', error.response)
         alert('Submit failed')
       })
   }
@@ -89,6 +91,7 @@ function RegisterForm () {
               </div>
             </form>
         </div>
+        <p data-testid="message">{message}</p>
         </React.Fragment>
   )
 }

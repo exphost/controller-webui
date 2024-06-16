@@ -26,7 +26,7 @@ beforeEach(() => {
 test('list app apps', async () => {
   window.API_URL = 'http://localhost:8080'
   act(() => {
-    render(<AppAppList org='test-org'/>)
+    render(<AppAppList org='test-org' refreshList={false}/>)
   })
   await waitFor(() => expect(screen.getByText('app1')).toBeInTheDocument)
   await waitFor(() => expect(screen.getByText('app2')).toBeInTheDocument)
