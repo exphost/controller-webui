@@ -7,6 +7,26 @@ function AppNginxList (props) {
   const [apps, setApps] = useState(<tr><td>0</td><td span="2">Loading</td></tr>)
   const [message, setMessage] = useState('')
 
+  const handleDelete = async (name) => {
+    event.preventDefault()
+    const requestOptions = {
+      url: window.API_URL + '/api/apps/v1/components/?org=' + props.org + '&app=' + props.app + '&name=' + name,
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + window.localStorage.getItem('access_token')
+      },
+      responseType: 'json'
+    }
+    try {
+      await axios.request(requestOptions)
+      setMessage('component deleted')
+      props.onChangeElement()
+    } catch (error) {
+      setMessage('Error deleting component')
+      // console.error('Error deleting domain:', error)
+    }
+  }
   function makeTable (content) {
     setApps(Object.keys(content).map((key, index) => {
       return (
@@ -15,6 +35,7 @@ function AppNginxList (props) {
         <td>{key}</td>
         <td>{content[key].config?.hostnames ? content[key].config.hostnames.join(', ') : ''}</td>
         <td>{content[key].config?.git ? content[key].config.git.repo + ' / ' + content[key].config.git.branch : ''}</td>
+        <td><button onClick={() => handleDelete(key)}>Delete</button></td>
         </tr>
       )
     }))
@@ -74,6 +95,7 @@ function AppNginxList (props) {
             <th>Name</th>
             <th>Fqdns</th>
             <th>Git</th>
+            <th>Delte</th>
           </tr></thead>
           <tbody>
           {apps}
@@ -87,7 +109,8 @@ function AppNginxList (props) {
 AppNginxList.propTypes = {
   org: PropTypes.string.isRequired,
   refreshList: PropTypes.bool.isRequired,
-  app: PropTypes.string.isRequired
+  app: PropTypes.string.isRequired,
+  onChangeElement: PropTypes.func.isRequired
 }
 
 export default AppNginxList

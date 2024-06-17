@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 
 function AppNginx (props) {
   const [refreshList, setRefreshList] = useState(false)
-  const handleAddElement = () => {
+  const handleChangeElement = () => {
     setRefreshList(!refreshList)
   }
 
@@ -20,10 +20,10 @@ function AppNginx (props) {
             <h1>Nginx</h1>
           </Container>
           <Container className='my-3'>
-            <AppNginxAdd org={props.org} onAddElement={handleAddElement} app={props.app} />
+            <AppNginxAdd org={props.org} onChangeElement={handleChangeElement} app={props.app} />
           </Container>
           <Container className='my-3'>
-            <AppNginxList org={props.org} refreshList={refreshList} app={props.app} />
+            <AppNginxList org={props.org} refreshList={refreshList} app={props.app} onChangeElement={handleChangeElement} />
           </Container>
       </React.Fragment>
   )
